@@ -1,4 +1,4 @@
-package com.kozsabynin.createyourself.fragments;
+package com.kozsabynin.createyourself.fragments.cashflow;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
