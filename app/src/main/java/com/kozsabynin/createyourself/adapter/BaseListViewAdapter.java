@@ -9,21 +9,21 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.kozsabynin.createyourself.R;
-import com.kozsabynin.createyourself.domain.BaseItem;
+import com.kozsabynin.createyourself.domain.Cashflow;
 
 import java.util.List;
 
 /**
  * Created by Evgeni Developer on 03.03.2016.
  */
-public class BaseListViewAdapter extends ArrayAdapter<BaseItem> {
+public class BaseListViewAdapter extends ArrayAdapter<Cashflow> {
     Context context;
     LayoutInflater inflater;
-    List<BaseItem> baseItemsList;
+    List<Cashflow> baseItemsList;
     private SparseBooleanArray mSelectedItemsIds;
 
     public BaseListViewAdapter(Context context, int resourceId,
-                               List<BaseItem> baseItemsList) {
+                               List<Cashflow> baseItemsList) {
         super(context, resourceId, baseItemsList);
         mSelectedItemsIds = new SparseBooleanArray();
         this.context = context;
@@ -59,7 +59,7 @@ public class BaseListViewAdapter extends ArrayAdapter<BaseItem> {
             holder = (ViewHolder) v.getTag();
 
         System.out.println("Position [" + position + "]");
-        BaseItem p = baseItemsList.get(position);
+        Cashflow p = baseItemsList.get(position);
         holder.title.setText(p.getTitle());
         holder.price.setText("" + p.getCost());
 
@@ -67,12 +67,12 @@ public class BaseListViewAdapter extends ArrayAdapter<BaseItem> {
     }
 
     @Override
-    public void remove(BaseItem object) {
+    public void remove(Cashflow object) {
         baseItemsList.remove(object);
         notifyDataSetChanged();
     }
 
-    public List<BaseItem> getWorldPopulation() {
+    public List<Cashflow> getWorldPopulation() {
         return baseItemsList;
     }
 

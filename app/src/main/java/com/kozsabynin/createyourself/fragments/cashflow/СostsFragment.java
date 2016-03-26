@@ -10,7 +10,9 @@ import android.widget.ListView;
 
 import com.kozsabynin.createyourself.R;
 import com.kozsabynin.createyourself.adapter.BaseListViewAdapter;
-import com.kozsabynin.createyourself.domain.BaseItem;
+import com.kozsabynin.createyourself.db.CashflowDbHelper;
+import com.kozsabynin.createyourself.domain.CashType;
+import com.kozsabynin.createyourself.domain.Cashflow;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,10 +32,8 @@ public class СostsFragment extends Fragment {
         };
 // используем адаптер данных
 
-        List<BaseItem> baseItems = new ArrayList<>();
-        for (int i = 0; i < titles.length; i++) {
-            baseItems.add(new BaseItem(titles[i],1000));
-        }
+        CashflowDbHelper cashflowDbHelper = new CashflowDbHelper(getActivity());
+        List<Cashflow> baseItems = cashflowDbHelper.getCashflowByType(CashType.EXPENSE);
 
         BaseListViewAdapter adapter = new BaseListViewAdapter(getContext(),android.R.layout.simple_list_item_1,baseItems);
         listView.setAdapter(adapter);

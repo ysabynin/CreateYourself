@@ -9,34 +9,45 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.kozsabynin.createyourself.CreateCashflowActivity">
 
+    <RadioGroup android:id="@+id/cash_type_radio_group"
+        android:layout_width="fill_parent" android:layout_height="80dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:weightSum="1"
+        android:layout_below="@+id/cost_editor"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true">
+        <RadioButton
+            android:layout_width="72dp"
+            android:layout_height="wrap_content"
+            android:text="Доходы"
+            android:id="@+id/income_radio_button"
+            android:checked="false"
+            android:layout_below="@+id/cost_editor"
+            android:layout_alignLeft="@+id/cost_editor"
+            android:layout_alignStart="@+id/cost_editor"
+            android:layout_gravity="center|left"
+            android:layout_weight="0.12" />
 
-    <RadioButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Расходы"
-        android:id="@+id/radioButton"
-        android:checked="true"
-        android:layout_alignTop="@+id/radioButton2"
-        android:layout_alignRight="@+id/editText"
-        android:layout_alignEnd="@+id/editText" />
-
-    <RadioButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Доходы"
-        android:id="@+id/radioButton2"
-        android:checked="false"
-        android:layout_below="@+id/editText"
-        android:layout_alignLeft="@+id/editText"
-        android:layout_alignStart="@+id/editText"
-        android:layout_marginTop="50dp" />
-
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Расходы"
+            android:id="@+id/expense_radio_button"
+            android:checked="true"
+            android:layout_alignTop="@+id/income_radio_button"
+            android:layout_alignRight="@+id/cost_editor"
+            android:layout_alignEnd="@+id/cost_editor"
+            android:layout_gravity="center|right"
+            android:layout_weight="0.00" />
+    </RadioGroup>
+    
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Сохранить"
         android:id="@+id/save_button"
-        android:layout_below="@+id/editText2"
+        android:layout_below="@+id/title_editor"
         android:layout_centerHorizontal="true" />
 
     <EditText
@@ -44,22 +55,23 @@
         android:layout_height="wrap_content"
         android:inputType="number"
         android:ems="10"
-        android:id="@+id/editText"
+        android:id="@+id/cost_editor"
+        android:text="0,00 руб"
+        android:layout_gravity="right|top|start|end"
+        android:textAlignment="viewEnd"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:text="0,00 руб"
-        android:layout_gravity="right|top|end"
-        android:textAlignment="viewEnd" />
+        android:layout_marginTop="60dp" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/editText2"
-        android:layout_marginTop="28dp"
-        android:layout_below="@+id/radioButton"
-        android:layout_alignRight="@+id/radioButton"
-        android:layout_alignEnd="@+id/radioButton"
-        android:layout_alignLeft="@+id/radioButton2"
-        android:layout_alignStart="@+id/radioButton2" />
+        android:id="@+id/title_editor"
+        android:layout_gravity="right|top|end"
+        android:layout_below="@+id/cash_type_radio_group"
+        android:layout_alignRight="@+id/cost_editor"
+        android:layout_alignEnd="@+id/cost_editor"
+        android:layout_alignLeft="@+id/cost_editor"
+        android:layout_alignStart="@+id/cost_editor" />
 
 </RelativeLayout>
