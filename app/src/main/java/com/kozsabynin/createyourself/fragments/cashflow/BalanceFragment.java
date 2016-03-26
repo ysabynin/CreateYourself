@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import com.kozsabynin.createyourself.R;
 
 public class BalanceFragment extends Fragment {
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
