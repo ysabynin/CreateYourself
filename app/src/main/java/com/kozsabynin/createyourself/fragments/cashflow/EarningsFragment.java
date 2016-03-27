@@ -1,6 +1,7 @@
 package com.kozsabynin.createyourself.fragments.cashflow;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -8,14 +9,15 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.kozsabynin.createyourself.R;
+import com.kozsabynin.createyourself.activity.CashDetailsActivity;
 import com.kozsabynin.createyourself.adapter.BaseListViewAdapter;
 import com.kozsabynin.createyourself.db.CashflowDbHelper;
 import com.kozsabynin.createyourself.domain.CashType;
@@ -34,6 +36,16 @@ public class EarningsFragment extends Fragment {
         FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
         fab.show();
         showDialog(fab);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+/*                android.support.v4.app.FragmentManager fm = getFragmentManager();
+                Fragment cashItemFragment = new CashItemFragment();
+//                profileFragment.setArguments(bundle);
+                fm.beginTransaction().replace(R.id.cashflow_list, cashItemFragment).commit();*/
+
+            }
+        });
 
 /*        final String[] titles = new String[]{
                 "Выиграл в лотерею", "Фриланс", "Халтура от друзей", "Зарплата",
@@ -52,6 +64,16 @@ public class EarningsFragment extends Fragment {
 
         BaseListViewAdapter adapter = new BaseListViewAdapter(getContext(), android.R.layout.simple_list_item_1, baseItems);
         listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Cashflow cashflow = (Cashflow) adapterView.getItemAtPosition(i);
+                Intent intent = new Intent(view.getContext(), CashDetailsActivity.class);
+                intent.putExtra("cashflow", cashflow);
+                startActivity(intent);
+            }
+        });
         return listView;
     }
 
@@ -66,7 +88,6 @@ public class EarningsFragment extends Fragment {
                 final EditText titleEditor = (EditText)dialog.findViewById(R.id.title_editor);
                 final RadioButton incomeCheckBox = (RadioButton)dialog.findViewById(R.id.income_radio_button);
                 RadioGroup radiogroup = (RadioGroup) dialog.findViewById(R.id.cash_type_radio_group);
-
 
                 dialog.setTitle("Новая операция");
                 dialog.setCancelable(true);

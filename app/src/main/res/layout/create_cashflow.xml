@@ -14,9 +14,9 @@
         android:gravity="center"
         android:orientation="horizontal"
         android:weightSum="1"
+        android:layout_alignParentEnd="true"
         android:layout_below="@+id/cost_editor"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true">
+        android:layout_centerHorizontal="true">
         <RadioButton
             android:layout_width="72dp"
             android:layout_height="wrap_content"
@@ -27,7 +27,7 @@
             android:layout_alignLeft="@+id/cost_editor"
             android:layout_alignStart="@+id/cost_editor"
             android:layout_gravity="center|left"
-            android:layout_weight="0.12" />
+            android:layout_weight="0.29" />
 
         <RadioButton
             android:layout_width="wrap_content"
@@ -39,7 +39,7 @@
             android:layout_alignRight="@+id/cost_editor"
             android:layout_alignEnd="@+id/cost_editor"
             android:layout_gravity="center|right"
-            android:layout_weight="0.00" />
+            android:layout_weight="0.17" />
     </RadioGroup>
     
     <Button
@@ -59,9 +59,9 @@
         android:text="0,00 руб"
         android:layout_gravity="right|top|start|end"
         android:textAlignment="viewEnd"
+        android:layout_marginTop="20dp"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="60dp" />
+        android:layout_centerHorizontal="true" />
 
     <EditText
         android:layout_width="wrap_content"

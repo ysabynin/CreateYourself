@@ -31,7 +31,7 @@ android:background="?android:attr/activatedBackgroundIndicator" >
         android:paddingEnd="2dp"
         android:paddingBottom="10dp"
         android:paddingTop="10dp"
-        android:minHeight="30dp" />
+        android:minHeight="30dp"/>
 
 <!--<TextView
     android:id="@+id/price"

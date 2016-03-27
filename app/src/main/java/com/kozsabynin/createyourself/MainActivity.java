@@ -19,7 +19,7 @@ import com.kozsabynin.createyourself.fragments.FaveFragment;
 import com.kozsabynin.createyourself.fragments.MainFragment;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

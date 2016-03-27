@@ -14,7 +14,6 @@ import com.kozsabynin.createyourself.db.CashflowDbHelper;
 import com.kozsabynin.createyourself.domain.CashType;
 import com.kozsabynin.createyourself.domain.Cashflow;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class СostsFragment extends Fragment {
