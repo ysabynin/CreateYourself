@@ -1,10 +1,14 @@
 package com.kozsabynin.createyourself.domain;
 
+import java.io.Serializable;
+
 /**
  * Created by Evgeni Developer on 03.03.2016.
  */
 
-public class Cashflow {
+public class Cashflow implements Serializable{
+    private static final long serialVersionUID = -7060210544600464481L;
+
     private Integer id;
     private String title;
     private CashType type;
