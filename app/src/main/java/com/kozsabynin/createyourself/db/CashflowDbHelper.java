@@ -56,7 +56,9 @@ public class CashflowDbHelper extends SQLiteOpenHelper {
         contentValues.put("title", cashflow.getTitle());
         contentValues.put("type", cashflow.getType().getText());
         contentValues.put("cost", cashflow.getCost());
+
         db.insert("cashflow", null, contentValues);
+
         return true;
     }
 
@@ -100,6 +102,11 @@ public class CashflowDbHelper extends SQLiteOpenHelper {
         }
 
         return cashflow;
+    }
+
+    public void deleteCashflowById(Cashflow cashflow){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(CASHFLOW_TABLE_NAME, "id=?", new String[]{Integer.toString(cashflow.getId())});
     }
 
 }

@@ -1,6 +1,5 @@
-package com.kozsabynin.createyourself;
+package com.kozsabynin.createyourself.activity;
 
-import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -14,9 +13,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
+import com.kozsabynin.createyourself.R;
 import com.kozsabynin.createyourself.fragments.CashflowFragment;
 import com.kozsabynin.createyourself.fragments.FaveFragment;
-import com.kozsabynin.createyourself.fragments.MainFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
@@ -40,8 +39,7 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        FragmentManager fm = getFragmentManager();
-        fm.beginTransaction().replace(R.id.content_frame, new MainFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new CashflowFragment()).commit();
     }
 
     @Override

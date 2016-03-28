@@ -14,6 +14,9 @@ public class Cashflow implements Serializable{
     private CashType type;
     private Double cost;
 
+    public Cashflow() {
+    }
+
     public Cashflow(String title, CashType type, Double cost) {
         this.title = title;
         this.type = type;
