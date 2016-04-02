@@ -24,13 +24,15 @@ public class CashflowDbHelper extends SQLiteOpenHelper {
     public static final String CASHFLOW_COLUMN_TYPE = "type";
     public static final String CASHFLOW_COLUMN_COST = "cost";
     public static final String CASHFLOW_COLUMN_DATE = "date";
+    public static final String CASHFLOW_COLUMN_TEMPLATE_IND = "template_ind";
 
     private final String CREATE_CASHFLOW_TABLE = "create table cashflow(" +
             "id integer primary key," +
             " title text," +
             " type text ," +
             " cost real," +
-            " date integer)";
+            " date integer," +
+            " template_ind integer)";
 
     public CashflowDbHelper(Context context) {
         super(context, DATABASE_NAME, null, 1);
@@ -62,6 +64,7 @@ public class CashflowDbHelper extends SQLiteOpenHelper {
         contentValues.put("type", cashflow.getType().getText());
         contentValues.put("cost", cashflow.getCost());
         contentValues.put("date", millis);
+        contentValues.put("template_ind", cashflow.isTemplate() ? 1 : 0);
 
         db.insert("cashflow", null, contentValues);
 
@@ -75,6 +78,7 @@ public class CashflowDbHelper extends SQLiteOpenHelper {
         contentValues.put("type", cashflow.getType().getText());
         contentValues.put("cost", cashflow.getCost());
         contentValues.put("date", cashflow.getDate().getTimeInMillis());
+        contentValues.put("template_ind", cashflow.isTemplate() ? 1 : 0);
 
         db.update("cashflow", contentValues, "id = ?", new String[]{cashflow.getId().toString()});
         return true;
@@ -93,29 +97,46 @@ public class CashflowDbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         Cursor res;
-        if(cashType != null)
+        if (cashType != null)
             res = db.query("cashflow", null, "type = ?", new String[]{cashType.getText()}, null, null, "cost DESC");
         else
             res = db.query("cashflow", null, null, null, null, null, "cost DESC");
 
-        res.moveToFirst();
+        return executeQuery(res);
+    }
 
-        while (res.isAfterLast() == false) {
-            Integer id = res.getInt(res.getColumnIndex(CASHFLOW_COLUMN_ID));
-            String name = res.getString(res.getColumnIndex(CASHFLOW_COLUMN_NAME));
+    public List<Cashflow> getCashflowTemplates(){
+        SQLiteDatabase db = this.getWritableDatabase();
 
-            String bdType = res.getString(res.getColumnIndex(CASHFLOW_COLUMN_TYPE));
+        Cursor res = db.query("cashflow", null, "template_ind = 1", null, null, null, "cost DESC");
+
+        return executeQuery(res);
+    }
+
+    private List<Cashflow> executeQuery(Cursor cursor){
+        List<Cashflow> cashflow = new ArrayList<>();
+
+        cursor.moveToFirst();
+
+        while (cursor.isAfterLast() == false) {
+            Integer id = cursor.getInt(cursor.getColumnIndex(CASHFLOW_COLUMN_ID));
+            String name = cursor.getString(cursor.getColumnIndex(CASHFLOW_COLUMN_NAME));
+
+            String bdType = cursor.getString(cursor.getColumnIndex(CASHFLOW_COLUMN_TYPE));
             CashType type = ("I".equals(bdType)) ? CashType.INCOME : CashType.EXPENSE;
 
-            Double cost = res.getDouble(res.getColumnIndex(CASHFLOW_COLUMN_COST));
+            Double cost = cursor.getDouble(cursor.getColumnIndex(CASHFLOW_COLUMN_COST));
 
-            long millis = res.getLong(res.getColumnIndex(CASHFLOW_COLUMN_DATE));
+            long millis = cursor.getLong(cursor.getColumnIndex(CASHFLOW_COLUMN_DATE));
             Calendar date = Calendar.getInstance();
             date.setTimeInMillis(millis);
 
-            cashflow.add(new Cashflow(id, name, type, cost, date));
+            int templateInd = cursor.getInt(cursor.getColumnIndex(CASHFLOW_COLUMN_TEMPLATE_IND));
+            boolean isTemplate = templateInd == 1 ? true : false;
 
-            res.moveToNext();
+            cashflow.add(new Cashflow(id, name, type, cost, date,isTemplate));
+
+            cursor.moveToNext();
         }
 
         return cashflow;

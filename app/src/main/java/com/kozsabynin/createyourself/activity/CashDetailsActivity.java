@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -51,6 +52,7 @@ public class CashDetailsActivity extends AppCompatActivity {
         dateEditor = (EditText) findViewById(R.id.date_input);
 
         final RadioButton incomeCheckBox = (RadioButton) findViewById(R.id.income_radio_button);
+        final CheckBox templateCheckBox = (CheckBox) findViewById(R.id.template_ind);
 
         Button saveButton = (Button) findViewById(R.id.button);
         saveButton.setOnClickListener(new View.OnClickListener() {
@@ -59,10 +61,9 @@ public class CashDetailsActivity extends AppCompatActivity {
                 CashflowDbHelper cashflowDbHelper = new CashflowDbHelper(getApplicationContext());
 
                 String title = titleEditor.getText().toString();
-
                 CashType type = (incomeCheckBox.isChecked()) ? CashType.INCOME : CashType.EXPENSE;
-
                 String costLine = costEditor.getText().toString().split(" ")[0].replace(",", ".");
+                boolean isTemplate = (templateCheckBox.isChecked()) ? true : false;
                 Double cost = null;
                 try {
                     cost = Double.valueOf(costLine);
@@ -71,9 +72,9 @@ public class CashDetailsActivity extends AppCompatActivity {
                 }
 
                 if (cashflow.getId() != null)
-                    cashflowDbHelper.updateCashflow(new Cashflow(cashflow.getId(), title, type, cost, curDate));
+                    cashflowDbHelper.updateCashflow(new Cashflow(cashflow.getId(), title, type, cost, curDate,isTemplate));
                 else
-                    cashflowDbHelper.insertCashflow(new Cashflow(title, type, cost, curDate));
+                    cashflowDbHelper.insertCashflow(new Cashflow(title, type, cost, curDate, isTemplate));
 
                 finish();
             }
@@ -85,12 +86,13 @@ public class CashDetailsActivity extends AppCompatActivity {
             titleEditor.setText(cashflow.getTitle());
 
             incomeCheckBox.setChecked(CashType.INCOME == cashflow.getType());
-
+            templateCheckBox.setChecked(cashflow.isTemplate());
             curDate = cashflow.getDate();
 
         } else {
             costEditor.setText("0.0");
             incomeCheckBox.setChecked(CashType.INCOME == cashflow.getType());
+            templateCheckBox.setChecked(cashflow.isTemplate());
 
             curDate = Calendar.getInstance();
         }
@@ -158,7 +160,7 @@ public class CashDetailsActivity extends AppCompatActivity {
             cashflowDbHelper.deleteCashflowById(cashflow);
             finish();
             return true;
-        } else if(id == android.R.id.home){
+        } else if (id == android.R.id.home) {
             finish();
             return true;
         }

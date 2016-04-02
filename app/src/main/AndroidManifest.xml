@@ -45,6 +45,24 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.kozsabynin.createyourself.activity.MainActivity" />
         </activity>
+        <activity
+            android:name=".activity.FilterActivity"
+            android:label="@string/title_activity_filter"
+            android:parentActivityName=".activity.HistoryActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.kozsabynin.createyourself.activity.HistoryActivity" />
+        </activity>
+        <activity
+            android:name=".activity.TemplateActivity"
+            android:label="@string/title_activity_template"
+            android:parentActivityName=".activity.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.kozsabynin.createyourself.activity.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

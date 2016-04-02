@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity
 
 
         } else if (id == R.id.templates) {
-            Intent intent = new Intent(this, HistoryActivity.class);
+            Intent intent = new Intent(this, TemplateActivity.class);
             startActivity(intent);
 
         } else if (id == R.id.history) {

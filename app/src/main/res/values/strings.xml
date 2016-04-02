@@ -30,4 +30,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_cash_details">CashDetailsActivity</string>
     <string name="title_activity_history">История</string>
+    <string name="title_activity_filter">Фильтрация</string>
+    <string name="title_activity_template">TemplateActivity</string>
 </resources>
