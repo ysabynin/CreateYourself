@@ -36,7 +36,7 @@ public class EarningsFragment extends Fragment {
         showDialog(fab);
 
         CashflowDbHelper cashflowDbHelper = new CashflowDbHelper(getActivity());
-        List<Cashflow> baseItems = cashflowDbHelper.getCashflowByType(CashType.INCOME);
+        List<Cashflow> baseItems = cashflowDbHelper.getCashflow(CashType.INCOME);
 
         BaseListViewAdapter adapter = new BaseListViewAdapter(getContext(), android.R.layout.simple_list_item_1, baseItems);
         listView.setAdapter(adapter);
@@ -69,7 +69,7 @@ public class EarningsFragment extends Fragment {
     public void onResume() {
 
         CashflowDbHelper cashflowDbHelper = new CashflowDbHelper(getActivity());
-        List<Cashflow> baseItems = cashflowDbHelper.getCashflowByType(CashType.INCOME);
+        List<Cashflow> baseItems = cashflowDbHelper.getCashflow(CashType.INCOME);
 
         adapter = new BaseListViewAdapter(getContext(), android.R.layout.simple_list_item_1, baseItems);
         listView.setAdapter(adapter);

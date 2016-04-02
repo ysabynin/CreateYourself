@@ -33,7 +33,6 @@
         tools:context=".fragments.cashflow.CashDetailsFragment"
         tools:showIn="@layout/cash_details_activity">
 
-
         <EditText
             android:id="@+id/cost_editor"
             android:layout_width="wrap_content"

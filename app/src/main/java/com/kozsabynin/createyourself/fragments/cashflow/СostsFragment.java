@@ -30,7 +30,7 @@ public class СostsFragment extends Fragment {
         listView = (ListView) rootView.findViewById(R.id.cashflow_list);
 
         CashflowDbHelper cashflowDbHelper = new CashflowDbHelper(getActivity());
-        List<Cashflow> baseItems = cashflowDbHelper.getCashflowByType(CashType.EXPENSE);
+        List<Cashflow> baseItems = cashflowDbHelper.getCashflow(CashType.EXPENSE);
 
         BaseListViewAdapter adapter = new BaseListViewAdapter(getContext(), android.R.layout.simple_list_item_1, baseItems);
         listView.setAdapter(adapter);
@@ -51,7 +51,7 @@ public class СostsFragment extends Fragment {
     public void onResume() {
 
         CashflowDbHelper cashflowDbHelper = new CashflowDbHelper(getActivity());
-        List<Cashflow> baseItems = cashflowDbHelper.getCashflowByType(CashType.EXPENSE);
+        List<Cashflow> baseItems = cashflowDbHelper.getCashflow(CashType.EXPENSE);
 
         BaseListViewAdapter adapter = new BaseListViewAdapter(getContext(), android.R.layout.simple_list_item_1, baseItems);
         listView.setAdapter(adapter);

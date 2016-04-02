@@ -1,5 +1,6 @@
 package com.kozsabynin.createyourself.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -91,7 +92,7 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_camera) {
             fm = getSupportFragmentManager();
             fm.beginTransaction().replace(R.id.content_frame, new CashflowFragment()).commit();
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.category) {
             fm = getSupportFragmentManager();
 
             fm.beginTransaction().replace(R.id.content_frame, new FaveFragment()).commit();
@@ -100,14 +101,13 @@ public class MainActivity extends AppCompatActivity
                 getSupportFragmentManager().beginTransaction().remove(fragment).commit();
 
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.templates) {
+            Intent intent = new Intent(this, HistoryActivity.class);
+            startActivity(intent);
 
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        } else if (id == R.id.history) {
+            Intent intent = new Intent(this, HistoryActivity.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

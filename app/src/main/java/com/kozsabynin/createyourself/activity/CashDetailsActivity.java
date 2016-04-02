@@ -158,6 +158,9 @@ public class CashDetailsActivity extends AppCompatActivity {
             cashflowDbHelper.deleteCashflowById(cashflow);
             finish();
             return true;
+        } else if(id == android.R.id.home){
+            finish();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);

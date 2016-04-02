@@ -5,7 +5,7 @@
 
     <item
         android:id="@+id/delete"
-        android:icon="@android:drawable/ic_menu_delete"
+        android:icon="@drawable/ic_delete"
         android:orderInCategory="101"
         app:showAsAction="always|withText">
     </item>

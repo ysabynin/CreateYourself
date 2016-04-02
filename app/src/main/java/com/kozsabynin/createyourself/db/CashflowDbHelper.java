@@ -87,12 +87,16 @@ public class CashflowDbHelper extends SQLiteOpenHelper {
                 new String[]{cashflow.getId().toString()});
     }
 
-    public List<Cashflow> getCashflowByType(CashType cashType) {
+    public List<Cashflow> getCashflow(CashType cashType) {
         List<Cashflow> cashflow = new ArrayList<>();
 
         SQLiteDatabase db = this.getWritableDatabase();
 
-        Cursor res = db.query("cashflow", null, "type = ?", new String[]{cashType.getText()}, null, null, "cost DESC");
+        Cursor res;
+        if(cashType != null)
+            res = db.query("cashflow", null, "type = ?", new String[]{cashType.getText()}, null, null, "cost DESC");
+        else
+            res = db.query("cashflow", null, null, null, null, null, "cost DESC");
 
         res.moveToFirst();
 
