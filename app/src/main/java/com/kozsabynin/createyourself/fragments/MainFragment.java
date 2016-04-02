@@ -19,7 +19,7 @@ public class MainFragment extends Fragment {
 /*
         return super.onCreateView(inflater, container, savedInstanceState);
 */
-        View rootView = inflater.inflate(R.layout.fragment_main,container,false);
+        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         return rootView;
     }

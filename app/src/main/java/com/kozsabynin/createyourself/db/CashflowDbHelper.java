@@ -10,6 +10,7 @@ import com.kozsabynin.createyourself.domain.CashType;
 import com.kozsabynin.createyourself.domain.Cashflow;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -22,12 +23,14 @@ public class CashflowDbHelper extends SQLiteOpenHelper {
     public static final String CASHFLOW_COLUMN_NAME = "title";
     public static final String CASHFLOW_COLUMN_TYPE = "type";
     public static final String CASHFLOW_COLUMN_COST = "cost";
+    public static final String CASHFLOW_COLUMN_DATE = "date";
 
     private final String CREATE_CASHFLOW_TABLE = "create table cashflow(" +
             "id integer primary key," +
             " title text," +
             " type text ," +
-            " cost real)";
+            " cost real," +
+            " date integer)";
 
     public CashflowDbHelper(Context context) {
         super(context, DATABASE_NAME, null, 1);
@@ -43,7 +46,7 @@ public class CashflowDbHelper extends SQLiteOpenHelper {
         db.execSQL("drop table if exists cashflow");
     }
 
-    public boolean removeAll(){
+    public boolean removeAll() {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(CASHFLOW_TABLE_NAME, null, null);
         return true;
@@ -52,10 +55,13 @@ public class CashflowDbHelper extends SQLiteOpenHelper {
     public boolean insertCashflow(Cashflow cashflow) {
         SQLiteDatabase db = this.getWritableDatabase();
 
+        long millis = cashflow.getDate().getTimeInMillis();
+
         ContentValues contentValues = new ContentValues();
         contentValues.put("title", cashflow.getTitle());
         contentValues.put("type", cashflow.getType().getText());
         contentValues.put("cost", cashflow.getCost());
+        contentValues.put("date", millis);
 
         db.insert("cashflow", null, contentValues);
 
@@ -68,6 +74,8 @@ public class CashflowDbHelper extends SQLiteOpenHelper {
         contentValues.put("title", cashflow.getTitle());
         contentValues.put("type", cashflow.getType().getText());
         contentValues.put("cost", cashflow.getCost());
+        contentValues.put("date", cashflow.getDate().getTimeInMillis());
+
         db.update("cashflow", contentValues, "id = ?", new String[]{cashflow.getId().toString()});
         return true;
     }
@@ -83,6 +91,7 @@ public class CashflowDbHelper extends SQLiteOpenHelper {
         List<Cashflow> cashflow = new ArrayList<>();
 
         SQLiteDatabase db = this.getWritableDatabase();
+
         Cursor res = db.query("cashflow", null, "type = ?", new String[]{cashType.getText()}, null, null, "cost DESC");
 
         res.moveToFirst();
@@ -96,7 +105,11 @@ public class CashflowDbHelper extends SQLiteOpenHelper {
 
             Double cost = res.getDouble(res.getColumnIndex(CASHFLOW_COLUMN_COST));
 
-            cashflow.add(new Cashflow(id, name, type, cost));
+            long millis = res.getLong(res.getColumnIndex(CASHFLOW_COLUMN_DATE));
+            Calendar date = Calendar.getInstance();
+            date.setTimeInMillis(millis);
+
+            cashflow.add(new Cashflow(id, name, type, cost, date));
 
             res.moveToNext();
         }
@@ -104,7 +117,7 @@ public class CashflowDbHelper extends SQLiteOpenHelper {
         return cashflow;
     }
 
-    public void deleteCashflowById(Cashflow cashflow){
+    public void deleteCashflowById(Cashflow cashflow) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(CASHFLOW_TABLE_NAME, "id=?", new String[]{Integer.toString(cashflow.getId())});
     }

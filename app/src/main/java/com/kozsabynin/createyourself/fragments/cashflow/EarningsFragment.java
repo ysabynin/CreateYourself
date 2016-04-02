@@ -23,6 +23,7 @@ import java.util.List;
 public class EarningsFragment extends Fragment {
     private BaseListViewAdapter adapter = null;
     private ListView listView = null;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

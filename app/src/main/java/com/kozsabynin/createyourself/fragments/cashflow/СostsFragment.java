@@ -25,14 +25,14 @@ public class СostsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.cashflow_list,null);
+        View rootView = inflater.inflate(R.layout.cashflow_list, null);
 
         listView = (ListView) rootView.findViewById(R.id.cashflow_list);
 
         CashflowDbHelper cashflowDbHelper = new CashflowDbHelper(getActivity());
         List<Cashflow> baseItems = cashflowDbHelper.getCashflowByType(CashType.EXPENSE);
 
-        BaseListViewAdapter adapter = new BaseListViewAdapter(getContext(),android.R.layout.simple_list_item_1,baseItems);
+        BaseListViewAdapter adapter = new BaseListViewAdapter(getContext(), android.R.layout.simple_list_item_1, baseItems);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -53,7 +53,7 @@ public class СostsFragment extends Fragment {
         CashflowDbHelper cashflowDbHelper = new CashflowDbHelper(getActivity());
         List<Cashflow> baseItems = cashflowDbHelper.getCashflowByType(CashType.EXPENSE);
 
-        BaseListViewAdapter adapter = new BaseListViewAdapter(getContext(),android.R.layout.simple_list_item_1,baseItems);
+        BaseListViewAdapter adapter = new BaseListViewAdapter(getContext(), android.R.layout.simple_list_item_1, baseItems);
         listView.setAdapter(adapter);
 
         adapter.notifyDataSetChanged();

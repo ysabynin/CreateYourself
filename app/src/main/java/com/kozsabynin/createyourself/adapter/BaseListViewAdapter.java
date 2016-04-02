@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.kozsabynin.createyourself.R;
 import com.kozsabynin.createyourself.domain.Cashflow;
+import com.kozsabynin.createyourself.util.DateUtils;
 
 import java.util.List;
 
@@ -34,6 +35,7 @@ public class BaseListViewAdapter extends ArrayAdapter<Cashflow> {
     private class ViewHolder {
         TextView title;
         TextView price;
+        TextView date;
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -49,19 +51,23 @@ public class BaseListViewAdapter extends ArrayAdapter<Cashflow> {
             // Now we can fill the layout with the right values
             TextView tv = (TextView) v.findViewById(R.id.title);
             TextView distView = (TextView) v.findViewById(R.id.price);
+            TextView dateView = (TextView) v.findViewById(R.id.date);
 
             holder.title = tv;
             holder.price = distView;
+            holder.date = dateView;
 
             v.setTag(holder);
-        }
-        else
+        } else
             holder = (ViewHolder) v.getTag();
 
         System.out.println("Position [" + position + "]");
         Cashflow p = baseItemsList.get(position);
         holder.title.setText(p.getTitle());
         holder.price.setText("" + p.getCost());
+
+        String dateText = DateUtils.getDateTextByCalendar(p.getDate());
+        holder.date.setText(dateText);
 
         return v;
     }

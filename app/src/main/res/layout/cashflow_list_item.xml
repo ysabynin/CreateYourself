@@ -8,8 +8,19 @@ android:background="?android:attr/activatedBackgroundIndicator" >
     android:id="@+id/title"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"/>-->
+    <TextView
+        android:id="@+id/date"
+        android:text="Date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/title"
+        android:layout_alignLeft="@+id/title"
+        android:layout_gravity="left|top|start"
+        android:textSize="@dimen/abc_action_button_min_width_overflow_material"
+        android:layout_below="@+id/title"
+        />
 
-    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    <TextView
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -19,9 +30,10 @@ android:background="?android:attr/activatedBackgroundIndicator" >
         android:paddingEnd="2dp"
         android:paddingBottom="10dp"
         android:paddingTop="10dp"
-        android:minHeight="10dp" />
+        android:minHeight="10dp"
+        />
 
-    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    <TextView
         android:id="@+id/price"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -32,12 +44,5 @@ android:background="?android:attr/activatedBackgroundIndicator" >
         android:paddingBottom="10dp"
         android:paddingTop="10dp"
         android:minHeight="30dp"/>
-
-<!--<TextView
-    android:id="@+id/price"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:gravity="right"
-    android:padding="1dp" />-->
 
 </RelativeLayout>

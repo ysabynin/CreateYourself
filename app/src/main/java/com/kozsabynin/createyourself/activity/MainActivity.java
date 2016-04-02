@@ -18,7 +18,7 @@ import com.kozsabynin.createyourself.fragments.CashflowFragment;
 import com.kozsabynin.createyourself.fragments.FaveFragment;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener{
+        implements NavigationView.OnNavigationItemSelectedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
 
-        android.support.v4.app.FragmentManager fm ;
+        android.support.v4.app.FragmentManager fm;
         int id = item.getItemId();
 
         FrameLayout frameLayout = (FrameLayout) findViewById(R.id.content_frame);
@@ -96,9 +96,8 @@ public class MainActivity extends AppCompatActivity
 
             fm.beginTransaction().replace(R.id.content_frame, new FaveFragment()).commit();
             Fragment fragment = getSupportFragmentManager().findFragmentByTag(String.valueOf(R.id.content_frame));
-            if(fragment != null)
+            if (fragment != null)
                 getSupportFragmentManager().beginTransaction().remove(fragment).commit();
-
 
 
         } else if (id == R.id.nav_slideshow) {

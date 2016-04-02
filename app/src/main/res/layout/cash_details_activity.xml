@@ -21,14 +21,113 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_cash_details" />
 
-<!--    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_dialog_email" />-->
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/cash_details_vertical_margin"
+        tools:context=".fragments.cashflow.CashDetailsFragment"
+        tools:showIn="@layout/cash_details_activity">
+
+
+        <EditText
+            android:id="@+id/cost_editor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/cash_type_radio_group"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignRight="@+id/cash_type_radio_group"
+            android:layout_gravity="right|top|start|end"
+            android:layout_marginTop="41dp"
+            android:ems="10"
+            android:inputType="number"
+            android:text="0,00 руб"
+            android:textAlignment="viewEnd"
+            android:textSize="@dimen/abc_action_button_min_width_overflow_material" />
+
+        <EditText
+            android:id="@+id/title_editor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|top|end"
+            android:layout_below="@+id/date_input"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="24dp"
+            android:layout_alignRight="@+id/date_input"
+            android:layout_alignEnd="@+id/date_input" />
+
+        <RadioGroup
+            android:id="@+id/cash_type_radio_group"
+            android:layout_width="fill_parent"
+            android:layout_height="80dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/cost_editor"
+            android:gravity="center|right"
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+            <RadioButton
+                android:id="@+id/income_radio_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/cost_editor"
+                android:layout_alignStart="@+id/cost_editor"
+                android:layout_below="@+id/cost_editor"
+                android:layout_gravity="center|left"
+                android:checked="false"
+                android:text="Доходы" />
+
+            <RadioButton
+                android:id="@+id/radioButton4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/cost_editor"
+                android:layout_alignRight="@+id/cost_editor"
+                android:layout_alignTop="@+id/income_radio_button"
+                android:layout_gravity="center|right"
+                android:checked="true"
+                android:text="Расходы" />
+        </RadioGroup>
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Сохранить"
+            android:layout_below="@+id/title_editor"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="32dp" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/date_input"
+            android:layout_below="@+id/cash_type_radio_group"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignRight="@+id/cash_type_radio_group"
+            android:layout_alignEnd="@+id/cash_type_radio_group"
+            android:onClick="onclick"
+            android:editable="false"
+            android:gravity="right" />
+
+    </RelativeLayout>
+
+
+    <!--    <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/fab_margin"
+            android:src="@android:drawable/ic_dialog_email" />-->
 
 </android.support.design.widget.CoordinatorLayout>

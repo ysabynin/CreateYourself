@@ -23,7 +23,7 @@ public class CashflowFragment extends Fragment {
 
     public static TabLayout tabLayout;
     public static ViewPager viewPager;
-    public static int int_items = 3 ;
+    public static int int_items = 3;
 
     @Nullable
     @Override
@@ -31,7 +31,7 @@ public class CashflowFragment extends Fragment {
         /**
          *Inflate tab_layout and setup Views.
          */
-        View x =  inflater.inflate(R.layout.tabs,null);
+        View x = inflater.inflate(R.layout.tabs, null);
         tabLayout = (TabLayout) x.findViewById(R.id.tabs);
         viewPager = (ViewPager) x.findViewById(R.id.viewpager);
         viewPager.setOffscreenPageLimit(3);
@@ -58,11 +58,10 @@ public class CashflowFragment extends Fragment {
 
     }
 
-    class MyAdapter extends FragmentPagerAdapter{
+    class MyAdapter extends FragmentPagerAdapter {
 
         @Override
-        public void destroyItem(ViewGroup container, int position, Object object)
-        {
+        public void destroyItem(ViewGroup container, int position, Object object) {
             FragmentManager manager = ((Fragment) object).getFragmentManager();
             manager.beginTransaction().remove((Fragment) object).commit();
         }
@@ -76,12 +75,14 @@ public class CashflowFragment extends Fragment {
          */
 
         @Override
-        public Fragment getItem(int position)
-        {
-            switch (position){
-                case 0 : return new EarningsFragment();
-                case 1 : return new СostsFragment();
-                case 2 : return new BalanceFragment();
+        public Fragment getItem(int position) {
+            switch (position) {
+                case 0:
+                    return new EarningsFragment();
+                case 1:
+                    return new СostsFragment();
+                case 2:
+                    return new BalanceFragment();
             }
             return null;
         }
@@ -100,12 +101,12 @@ public class CashflowFragment extends Fragment {
         @Override
         public CharSequence getPageTitle(int position) {
 
-            switch (position){
-                case 0 :
+            switch (position) {
+                case 0:
                     return "Доходы";
-                case 1 :
+                case 1:
                     return "Расходы";
-                case 2 :
+                case 2:
                     return "Остаток";
             }
             return null;
