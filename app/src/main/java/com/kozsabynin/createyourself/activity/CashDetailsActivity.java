@@ -2,6 +2,7 @@ package com.kozsabynin.createyourself.activity;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -18,8 +19,10 @@ import android.widget.RadioButton;
 
 import com.kozsabynin.createyourself.R;
 import com.kozsabynin.createyourself.db.CashflowDbHelper;
+import com.kozsabynin.createyourself.db.TemplateDbHelper;
 import com.kozsabynin.createyourself.domain.CashType;
 import com.kozsabynin.createyourself.domain.Cashflow;
+import com.kozsabynin.createyourself.domain.Template;
 import com.kozsabynin.createyourself.util.DateUtils;
 
 import java.util.Calendar;
@@ -33,8 +36,14 @@ public class CashDetailsActivity extends AppCompatActivity {
     int myMonth;
     int myDay;
 
+    private Context context;
 
     private EditText dateEditor;
+    private EditText costEditor;
+    private EditText titleEditor;
+    private RadioButton incomeCheckBox;
+    private CheckBox templateCheckBox;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,18 +52,27 @@ public class CashDetailsActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        Intent intent = getIntent();
+        context = this;
 
+        Intent intent = getIntent();
         cashflow = (Cashflow) intent.getSerializableExtra("cashflow");
 
-        final EditText costEditor = (EditText) findViewById(R.id.cost_editor);
-        final EditText titleEditor = (EditText) findViewById(R.id.title_editor);
+        costEditor = (EditText) findViewById(R.id.cost_editor);
+        titleEditor = (EditText) findViewById(R.id.title_editor);
         dateEditor = (EditText) findViewById(R.id.date_input);
 
-        final RadioButton incomeCheckBox = (RadioButton) findViewById(R.id.income_radio_button);
-        final CheckBox templateCheckBox = (CheckBox) findViewById(R.id.template_ind);
+        incomeCheckBox = (RadioButton) findViewById(R.id.income_radio_button);
+        templateCheckBox = (CheckBox) findViewById(R.id.template_ind);
 
+        bindSaveButtonEvent();
+        initFields(intent);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    private void bindSaveButtonEvent(){
         Button saveButton = (Button) findViewById(R.id.button);
+
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -64,45 +82,54 @@ public class CashDetailsActivity extends AppCompatActivity {
                 CashType type = (incomeCheckBox.isChecked()) ? CashType.INCOME : CashType.EXPENSE;
                 String costLine = costEditor.getText().toString().split(" ")[0].replace(",", ".");
                 boolean isTemplate = (templateCheckBox.isChecked()) ? true : false;
+
                 Double cost = null;
+
                 try {
                     cost = Double.valueOf(costLine);
                 } catch (NumberFormatException e) {
                     cost = 0.0;
                 }
 
+                if(isTemplate){
+                    TemplateDbHelper templateDbHelper = new TemplateDbHelper(context);
+                    templateDbHelper.insertTemplate(new Template(null,title,type,null,cost));
+                }
+
                 if (cashflow.getId() != null)
-                    cashflowDbHelper.updateCashflow(new Cashflow(cashflow.getId(), title, type, cost, curDate,isTemplate));
+                    cashflowDbHelper.updateCashflow(new Cashflow(cashflow.getId(), title, type, cost, curDate));
                 else
-                    cashflowDbHelper.insertCashflow(new Cashflow(title, type, cost, curDate, isTemplate));
+                    cashflowDbHelper.insertCashflow(new Cashflow(title, type, cost, curDate));
 
                 finish();
             }
         });
+    }
 
-
+    public void initFields(Intent intent){
         if (cashflow.getId() != null) {
             costEditor.setText(String.valueOf(cashflow.getCost()));
             titleEditor.setText(cashflow.getTitle());
 
             incomeCheckBox.setChecked(CashType.INCOME == cashflow.getType());
-            templateCheckBox.setChecked(cashflow.isTemplate());
             curDate = cashflow.getDate();
 
+        } else if(intent.hasExtra("isFromTemplateActivity")) {
+            cashflow.setId(null);
+
+            costEditor.setText(String.valueOf(cashflow.getCost()));
+            titleEditor.setText(cashflow.getTitle());
+
+            incomeCheckBox.setChecked(CashType.INCOME == cashflow.getType());
+            curDate = Calendar.getInstance();
         } else {
             costEditor.setText("0.0");
             incomeCheckBox.setChecked(CashType.INCOME == cashflow.getType());
-            templateCheckBox.setChecked(cashflow.isTemplate());
 
             curDate = Calendar.getInstance();
         }
 
         dateEditor.setText(DateUtils.getDateTextByCalendar(curDate));
-
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-
     }
 
     @Override
@@ -155,9 +182,16 @@ public class CashDetailsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
+
         if (id == R.id.delete) {
             CashflowDbHelper cashflowDbHelper = new CashflowDbHelper(getApplicationContext());
             cashflowDbHelper.deleteCashflowById(cashflow);
+            finish();
+            return true;
+        } else if (id == R.id.templates) {
+            Intent intent = new Intent(this, TemplateActivity.class);
+            intent.putExtra("cashflow", cashflow);
+            startActivity(intent);
             finish();
             return true;
         } else if (id == android.R.id.home) {

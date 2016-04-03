@@ -17,6 +17,8 @@ import android.widget.FrameLayout;
 import com.kozsabynin.createyourself.R;
 import com.kozsabynin.createyourself.fragments.CashflowFragment;
 import com.kozsabynin.createyourself.fragments.FaveFragment;
+import com.kozsabynin.createyourself.fragments.HistoryFragment;
+import com.kozsabynin.createyourself.fragments.TemplateFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -102,12 +104,12 @@ public class MainActivity extends AppCompatActivity
 
 
         } else if (id == R.id.templates) {
-            Intent intent = new Intent(this, TemplateActivity.class);
-            startActivity(intent);
+            fm = getSupportFragmentManager();
+            fm.beginTransaction().replace(R.id.content_frame, new TemplateFragment()).commit();
 
         } else if (id == R.id.history) {
-            Intent intent = new Intent(this, HistoryActivity.class);
-            startActivity(intent);
+            fm = getSupportFragmentManager();
+            fm.beginTransaction().replace(R.id.content_frame, new HistoryFragment()).commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

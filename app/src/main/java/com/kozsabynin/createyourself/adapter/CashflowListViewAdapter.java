@@ -17,14 +17,14 @@ import java.util.List;
 /**
  * Created by Evgeni Developer on 03.03.2016.
  */
-public class BaseListViewAdapter extends ArrayAdapter<Cashflow> {
+public class CashflowListViewAdapter extends ArrayAdapter<Cashflow> {
     Context context;
     LayoutInflater inflater;
     List<Cashflow> baseItemsList;
     private SparseBooleanArray mSelectedItemsIds;
 
-    public BaseListViewAdapter(Context context, int resourceId,
-                               List<Cashflow> baseItemsList) {
+    public CashflowListViewAdapter(Context context, int resourceId,
+                                   List<Cashflow> baseItemsList) {
         super(context, resourceId, baseItemsList);
         mSelectedItemsIds = new SparseBooleanArray();
         this.context = context;

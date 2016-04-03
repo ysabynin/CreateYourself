@@ -1,40 +1,52 @@
-package com.kozsabynin.createyourself.activity;
+package com.kozsabynin.createyourself.fragments;
+
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.kozsabynin.createyourself.R;
-import com.kozsabynin.createyourself.adapter.BaseListViewAdapter;
+import com.kozsabynin.createyourself.activity.CashDetailsActivity;
+import com.kozsabynin.createyourself.adapter.CashflowListViewAdapter;
 import com.kozsabynin.createyourself.db.CashflowDbHelper;
-import com.kozsabynin.createyourself.domain.CashType;
 import com.kozsabynin.createyourself.domain.Cashflow;
 
 import java.util.List;
 
-public class HistoryActivity extends AppCompatActivity {
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class HistoryFragment extends Fragment {
+
+
+    public HistoryFragment() {
+        // Required empty public constructor
+    }
+
+    private CashflowListViewAdapter adapter = null;
     private ListView listView;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.history_activity);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.history_fragment, container, false);
 
-        listView = (ListView) findViewById(R.id.history_list);
 
-        CashflowDbHelper cashflowDbHelper = new CashflowDbHelper(this);
+        listView = (ListView) view.findViewById(R.id.history_list);
+
+        CashflowDbHelper cashflowDbHelper = new CashflowDbHelper(getActivity());
         List<Cashflow> baseItems = cashflowDbHelper.getCashflow(null);
 
-        BaseListViewAdapter adapter = new BaseListViewAdapter(this, android.R.layout.simple_list_item_1, baseItems);
+        CashflowListViewAdapter adapter = new CashflowListViewAdapter(getContext(), android.R.layout.simple_list_item_1, baseItems);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -47,7 +59,9 @@ public class HistoryActivity extends AppCompatActivity {
             }
         });
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setHasOptionsMenu(true);
+
+        return view;
     }
 
     @Override
@@ -55,12 +69,7 @@ public class HistoryActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.filter) {
-/*            CashflowDbHelper cashflowDbHelper = new CashflowDbHelper(getApplicationContext());
-            cashflowDbHelper.deleteCashflowById(cashflow);
-            finish();*/
-            return true;
-        } else if(id == android.R.id.home){
-            finish();
+
             return true;
         }
 
@@ -68,10 +77,9 @@ public class HistoryActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.history_activity, menu);
-        return true;
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
 }

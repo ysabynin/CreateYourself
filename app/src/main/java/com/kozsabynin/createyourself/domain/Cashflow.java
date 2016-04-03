@@ -15,26 +15,23 @@ public class Cashflow implements Serializable {
     private CashType type;
     private Double cost;
     private Calendar date;
-    private boolean isTemplate;
 
     public Cashflow() {
     }
 
-    public Cashflow(String title, CashType type, Double cost, Calendar date, boolean isTemplate) {
-        this.title = title;
-        this.type = type;
-        this.cost = cost;
-        this.date = date;
-        this.isTemplate = isTemplate;
-    }
-
-    public Cashflow(Integer id, String title, CashType type, Double cost, Calendar date, boolean isTemplate) {
+    public Cashflow(Integer id, String title, CashType type, Double cost, Calendar date) {
         this.id = id;
         this.title = title;
         this.type = type;
         this.cost = cost;
         this.date = date;
-        this.isTemplate = isTemplate;
+    }
+
+    public Cashflow(String title, CashType type, Double cost, Calendar date) {
+        this.title = title;
+        this.type = type;
+        this.cost = cost;
+        this.date = date;
     }
 
     public Integer getId() {
@@ -77,11 +74,4 @@ public class Cashflow implements Serializable {
         this.id = id;
     }
 
-    public boolean isTemplate() {
-        return isTemplate;
-    }
-
-    public void setIsTemplate(boolean isTemplate) {
-        this.isTemplate = isTemplate;
-    }
 }

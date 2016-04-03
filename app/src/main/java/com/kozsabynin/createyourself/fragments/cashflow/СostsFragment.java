@@ -12,7 +12,7 @@ import android.widget.ListView;
 
 import com.kozsabynin.createyourself.R;
 import com.kozsabynin.createyourself.activity.CashDetailsActivity;
-import com.kozsabynin.createyourself.adapter.BaseListViewAdapter;
+import com.kozsabynin.createyourself.adapter.CashflowListViewAdapter;
 import com.kozsabynin.createyourself.db.CashflowDbHelper;
 import com.kozsabynin.createyourself.domain.CashType;
 import com.kozsabynin.createyourself.domain.Cashflow;
@@ -32,7 +32,7 @@ public class СostsFragment extends Fragment {
         CashflowDbHelper cashflowDbHelper = new CashflowDbHelper(getActivity());
         List<Cashflow> baseItems = cashflowDbHelper.getCashflow(CashType.EXPENSE);
 
-        BaseListViewAdapter adapter = new BaseListViewAdapter(getContext(), android.R.layout.simple_list_item_1, baseItems);
+        CashflowListViewAdapter adapter = new CashflowListViewAdapter(getContext(), android.R.layout.simple_list_item_1, baseItems);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -53,7 +53,7 @@ public class СostsFragment extends Fragment {
         CashflowDbHelper cashflowDbHelper = new CashflowDbHelper(getActivity());
         List<Cashflow> baseItems = cashflowDbHelper.getCashflow(CashType.EXPENSE);
 
-        BaseListViewAdapter adapter = new BaseListViewAdapter(getContext(), android.R.layout.simple_list_item_1, baseItems);
+        CashflowListViewAdapter adapter = new CashflowListViewAdapter(getContext(), android.R.layout.simple_list_item_1, baseItems);
         listView.setAdapter(adapter);
 
         adapter.notifyDataSetChanged();

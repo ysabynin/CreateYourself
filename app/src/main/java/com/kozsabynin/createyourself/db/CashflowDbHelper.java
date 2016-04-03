@@ -64,7 +64,6 @@ public class CashflowDbHelper extends SQLiteOpenHelper {
         contentValues.put("type", cashflow.getType().getText());
         contentValues.put("cost", cashflow.getCost());
         contentValues.put("date", millis);
-        contentValues.put("template_ind", cashflow.isTemplate() ? 1 : 0);
 
         db.insert("cashflow", null, contentValues);
 
@@ -78,7 +77,6 @@ public class CashflowDbHelper extends SQLiteOpenHelper {
         contentValues.put("type", cashflow.getType().getText());
         contentValues.put("cost", cashflow.getCost());
         contentValues.put("date", cashflow.getDate().getTimeInMillis());
-        contentValues.put("template_ind", cashflow.isTemplate() ? 1 : 0);
 
         db.update("cashflow", contentValues, "id = ?", new String[]{cashflow.getId().toString()});
         return true;
@@ -98,7 +96,7 @@ public class CashflowDbHelper extends SQLiteOpenHelper {
 
         Cursor res;
         if (cashType != null)
-            res = db.query("cashflow", null, "type = ?", new String[]{cashType.getText()}, null, null, "cost DESC");
+            res = db.query("cashflow", null, "type = ?", new String[]{cashType.getText()}, null, null, "date DESC, cost DESC");
         else
             res = db.query("cashflow", null, null, null, null, null, "cost DESC");
 
@@ -131,10 +129,7 @@ public class CashflowDbHelper extends SQLiteOpenHelper {
             Calendar date = Calendar.getInstance();
             date.setTimeInMillis(millis);
 
-            int templateInd = cursor.getInt(cursor.getColumnIndex(CASHFLOW_COLUMN_TEMPLATE_IND));
-            boolean isTemplate = templateInd == 1 ? true : false;
-
-            cashflow.add(new Cashflow(id, name, type, cost, date,isTemplate));
+            cashflow.add(new Cashflow(id, name, type, cost, date));
 
             cursor.moveToNext();
         }

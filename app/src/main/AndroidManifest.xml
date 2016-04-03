@@ -37,15 +37,6 @@
                 android:value=".activity.MainActivity" />
         </activity>
         <activity
-            android:name=".activity.HistoryActivity"
-            android:label="@string/title_activity_history"
-            android:parentActivityName=".activity.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.kozsabynin.createyourself.activity.MainActivity" />
-        </activity>
-        <activity
             android:name=".activity.FilterActivity"
             android:label="@string/title_activity_filter"
             android:parentActivityName=".activity.HistoryActivity"
@@ -57,11 +48,11 @@
         <activity
             android:name=".activity.TemplateActivity"
             android:label="@string/title_activity_template"
-            android:parentActivityName=".activity.MainActivity"
+            android:parentActivityName=".activity.CashDetailsActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.kozsabynin.createyourself.activity.MainActivity" />
+                android:value="com.kozsabynin.createyourself.activity.CashDetailsActivity" />
         </activity>
     </application>
 
