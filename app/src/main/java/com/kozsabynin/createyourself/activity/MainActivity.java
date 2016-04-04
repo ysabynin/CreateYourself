@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.category) {
             fm = getSupportFragmentManager();
 
-            fm.beginTransaction().replace(R.id.content_frame, new FaveFragment()).commit();
+            fm.beginTransaction().replace(R.id.content_frame, new CategoryActivityFragment()).commit();
             Fragment fragment = getSupportFragmentManager().findFragmentByTag(String.valueOf(R.id.content_frame));
             if (fragment != null)
                 getSupportFragmentManager().beginTransaction().remove(fragment).commit();

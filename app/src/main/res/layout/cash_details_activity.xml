@@ -58,20 +58,20 @@
             android:layout_below="@+id/date_input"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_marginTop="24dp"
             android:layout_alignRight="@+id/date_input"
-            android:layout_alignEnd="@+id/date_input" />
+            android:layout_alignEnd="@+id/date_input"
+            android:layout_marginTop="20dp" />
 
         <RadioGroup
             android:id="@+id/cash_type_radio_group"
             android:layout_width="fill_parent"
             android:layout_height="80dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/cost_editor"
             android:gravity="center|right"
             android:orientation="horizontal"
-            android:weightSum="1">
+            android:weightSum="1"
+            android:layout_below="@+id/category_editor"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true">
 
             <RadioButton
                 android:id="@+id/income_radio_button"
@@ -108,25 +108,36 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/date_input"
-            android:layout_below="@+id/cash_type_radio_group"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignRight="@+id/cash_type_radio_group"
-            android:layout_alignEnd="@+id/cash_type_radio_group"
             android:onClick="onclick"
             android:editable="false"
-            android:gravity="right" />
+            android:gravity="right"
+            android:layout_below="@+id/cash_type_radio_group"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
 
         <CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Сохранить как шаблон"
             android:id="@+id/template_ind"
+            android:checked="false"
             android:layout_below="@+id/title_editor"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_marginTop="40dp"
-            android:checked="false" />
+            android:layout_marginTop="20dp" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/category_editor"
+            android:layout_below="@+id/cost_editor"
+            android:layout_marginTop="20dp"
+            android:layout_alignRight="@+id/cost_editor"
+            android:layout_alignEnd="@+id/cost_editor"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
 
     </RelativeLayout>
 

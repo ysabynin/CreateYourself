@@ -54,6 +54,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.kozsabynin.createyourself.activity.CashDetailsActivity" />
         </activity>
+        <activity
+            android:name=".activity.CategoryActivity"
+            android:label="@string/title_activity_category"
+            android:parentActivityName=".activity.CashDetailsActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.kozsabynin.createyourself.activity.CashDetailsActivity" />
+        </activity>
     </application>
 
 </manifest>
