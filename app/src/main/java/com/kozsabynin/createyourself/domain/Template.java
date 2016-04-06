@@ -1,17 +1,29 @@
 package com.kozsabynin.createyourself.domain;
 
+import java.io.Serializable;
 import java.util.Calendar;
 
 /**
  * Created by Evgeni Developer on 03.04.2016.
  */
-public class Template {
+public class Template implements Serializable{
+    private static final long serialVersionUID = -7060210544600464481L;
 
     private Integer id;
     private String title;
     private CashType type;
     private Category category;
     private Double cost;
+
+    public Template() {
+    }
+
+    public Template(String title, CashType type, Category category, Double cost) {
+        this.title = title;
+        this.type = type;
+        this.category = category;
+        this.cost = cost;
+    }
 
     public Template(Integer id, String title, CashType type, Category category, Double cost) {
         this.id = id;

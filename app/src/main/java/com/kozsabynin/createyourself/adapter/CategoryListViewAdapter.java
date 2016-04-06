@@ -1,6 +1,8 @@
 package com.kozsabynin.createyourself.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +36,7 @@ public class CategoryListViewAdapter extends ArrayAdapter<Category> {
 
     private class ViewHolder {
         TextView title;
+        TextView categoryIcon;
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -48,14 +51,21 @@ public class CategoryListViewAdapter extends ArrayAdapter<Category> {
             v = inflater.inflate(R.layout.cashflow_list_item, null);
             // Now we can fill the layout with the right values
             TextView tv = (TextView) v.findViewById(R.id.title);
+            TextView categoryIcon = (TextView) v.findViewById(R.id.category_icon);
 
             holder.title = tv;
-
+            holder.categoryIcon = categoryIcon;
             v.setTag(holder);
         } else
             holder = (ViewHolder) v.getTag();
 
         Category p = baseItemsList.get(position);
+
+        GradientDrawable bgShape = (GradientDrawable)holder.categoryIcon.getBackground();
+        bgShape.setStroke(40, Color.RED);
+        String iconTitle = p.getTitle().substring(0,1);
+        holder.categoryIcon.setText(iconTitle);
+
         holder.title.setText(p.getTitle());
 
         return v;

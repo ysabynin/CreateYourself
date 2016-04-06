@@ -31,8 +31,6 @@ public class TemplateActivity extends AppCompatActivity {
 
         listView = (ListView) findViewById(R.id.template_list);
 
-        cashflowFromDetailsActivity = (Cashflow) getIntent().getSerializableExtra("cashflow");
-
         TemplateDbHelper cashflowDbHelper = new TemplateDbHelper(this);
         List<Template> baseItems = cashflowDbHelper.getTemplates();
 
@@ -42,13 +40,11 @@ public class TemplateActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Cashflow template = (Cashflow) adapterView.getItemAtPosition(i);
+                Template template = (Template) adapterView.getItemAtPosition(i);
                 Intent intent = new Intent(view.getContext(), CashDetailsActivity.class);
 
-                if(cashflowFromDetailsActivity.getId() == null)
                 intent.putExtra("template",template);
-                intent.putExtra("isFromTemplateActivity", true);
-                startActivity(intent);
+                setResult(RESULT_OK, intent);
                 finish();
             }
         });

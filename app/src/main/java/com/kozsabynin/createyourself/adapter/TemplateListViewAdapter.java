@@ -1,6 +1,8 @@
 package com.kozsabynin.createyourself.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,6 +38,7 @@ public class TemplateListViewAdapter extends ArrayAdapter<Template> {
     private class ViewHolder {
         TextView title;
         TextView price;
+        TextView categoryIcon;
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -51,15 +54,23 @@ public class TemplateListViewAdapter extends ArrayAdapter<Template> {
             // Now we can fill the layout with the right values
             TextView tv = (TextView) v.findViewById(R.id.title);
             TextView distView = (TextView) v.findViewById(R.id.price);
+            TextView categoryIcon = (TextView) v.findViewById(R.id.category_icon);
 
             holder.title = tv;
             holder.price = distView;
+            holder.categoryIcon = categoryIcon;
 
             v.setTag(holder);
         } else
             holder = (ViewHolder) v.getTag();
 
         Template template = baseItemsList.get(position);
+
+        GradientDrawable bgShape = (GradientDrawable)holder.categoryIcon.getBackground();
+        bgShape.setStroke(40, Color.BLUE);
+        String iconTitle = template.getTitle().substring(0,1);
+        holder.categoryIcon.setText(iconTitle);
+
         holder.title.setText(template.getTitle());
         holder.price.setText("" + template.getCost());
 

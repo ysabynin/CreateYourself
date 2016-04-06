@@ -3,6 +3,7 @@ package com.kozsabynin.createyourself.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -17,6 +18,7 @@ import com.kozsabynin.createyourself.R;
 import com.kozsabynin.createyourself.activity.CashDetailsActivity;
 import com.kozsabynin.createyourself.adapter.CashflowListViewAdapter;
 import com.kozsabynin.createyourself.db.CashflowDbHelper;
+import com.kozsabynin.createyourself.domain.CashType;
 import com.kozsabynin.createyourself.domain.Cashflow;
 
 import java.util.List;
@@ -37,11 +39,14 @@ public class HistoryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        // Inflate the layout for this layouts.fragment
         View view = inflater.inflate(R.layout.history_fragment, container, false);
 
 
         listView = (ListView) view.findViewById(R.id.history_list);
+
+        FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+        fab.hide();
 
         CashflowDbHelper cashflowDbHelper = new CashflowDbHelper(getActivity());
         List<Cashflow> baseItems = cashflowDbHelper.getCashflow(null);
@@ -80,6 +85,20 @@ public class HistoryFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.history_activity, menu);
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public void onResume() {
+
+        CashflowDbHelper cashflowDbHelper = new CashflowDbHelper(getActivity());
+        List<Cashflow> baseItems = cashflowDbHelper.getCashflow(CashType.INCOME);
+
+        adapter = new CashflowListViewAdapter(getContext(), android.R.layout.simple_list_item_1, baseItems);
+        listView.setAdapter(adapter);
+
+        adapter.notifyDataSetChanged();
+
+        super.onResume();
     }
 
 }

@@ -5,16 +5,25 @@ android:layout_height="fill_parent"
 android:background="?android:attr/activatedBackgroundIndicator" >
 
     <TextView
+        android:id="@+id/category_icon"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/shape"
+        android:gravity="center"
+        android:text="A"
+        android:textColor="#FFFFFF" />
+
+    <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceListItemSmall"
         android:gravity="center_vertical"
-        android:paddingStart="2dp"
-        android:paddingEnd="2dp"
-        android:paddingBottom="10dp"
-        android:paddingTop="10dp"
-        android:minHeight="10dp"
+        android:layout_toRightOf="@+id/category_icon"
         />
 
     <TextView
@@ -24,8 +33,8 @@ android:background="?android:attr/activatedBackgroundIndicator" >
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/title"
         android:layout_alignLeft="@+id/title"
-        android:layout_gravity="left|top|start"
-        android:textSize="24dp"
+        android:layout_toRightOf="@+id/category_icon"
+        android:textSize="12dp"
         android:layout_below="@+id/title"
         />
 

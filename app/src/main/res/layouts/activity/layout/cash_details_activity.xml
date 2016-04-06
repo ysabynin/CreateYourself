@@ -74,7 +74,7 @@
             android:layout_alignParentEnd="true">
 
             <RadioButton
-                android:id="@+id/income_radio_button"
+                android:id="@+id/category_income_radio_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignLeft="@+id/cost_editor"
@@ -90,7 +90,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignEnd="@+id/cost_editor"
                 android:layout_alignRight="@+id/cost_editor"
-                android:layout_alignTop="@+id/income_radio_button"
+                android:layout_alignTop="@+id/category_income_radio_button"
                 android:layout_gravity="center|right"
                 android:checked="true"
                 android:text="Расходы" />

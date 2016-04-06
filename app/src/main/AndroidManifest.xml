@@ -63,6 +63,24 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.kozsabynin.createyourself.activity.CashDetailsActivity" />
         </activity>
+        <activity
+            android:name=".activity.CategoryDetailsActivity"
+            android:label="@string/title_activity_category_details"
+            android:parentActivityName=".activity.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.kozsabynin.createyourself.activity.MainActivity" />
+        </activity>
+        <activity
+            android:name=".activity.TemplateDetails"
+            android:label="@string/title_activity_template_details"
+            android:parentActivityName=".activity.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.kozsabynin.createyourself.activity.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

@@ -33,4 +33,6 @@
     <string name="title_activity_filter">Фильтрация</string>
     <string name="title_activity_template">TemplateActivity</string>
     <string name="title_activity_category">Категории</string>
+    <string name="title_activity_category_details">Редактировать категорию</string>
+    <string name="title_activity_template_details">Редактирование шаблона</string>
 </resources>

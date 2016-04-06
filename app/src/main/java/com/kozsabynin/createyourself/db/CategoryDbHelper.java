@@ -10,7 +10,6 @@ import com.kozsabynin.createyourself.domain.CashType;
 import com.kozsabynin.createyourself.domain.Category;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -20,14 +19,14 @@ public class CategoryDbHelper extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "CreateYourself.db";
     public static final String CATEGORY_TABLE_NAME = "category";
-    public static final String CATEGORY_COLUMN_ID = "id";
-    public static final String CATEGORY_COLUMN_NAME = "title";
-    public static final String CATEGORY_COLUMN_TYPE = "type";
+    public static final String CATEGORY_COLUMN_ID = "category_id";
+    public static final String CATEGORY_COLUMN_NAME = "category_title";
+    public static final String CATEGORY_COLUMN_TYPE = "category_type";
 
-    private final String CREATE_CATEGORY_TABLE = "create table category(" +
-            "id integer primary key," +
-            " title text," +
-            " type text )";
+    public static final String CREATE_CATEGORY_TABLE = "create table category(" +
+            "category_id integer primary key," +
+            " category_title text," +
+            " category_type text )";
 
     public CategoryDbHelper(Context context) {
         super(context, DATABASE_NAME, null, 1);
@@ -53,8 +52,8 @@ public class CategoryDbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         
         ContentValues contentValues = new ContentValues();
-        contentValues.put("title", category.getTitle());
-        contentValues.put("type", category.getType().getText());
+        contentValues.put("category_title", category.getTitle());
+        contentValues.put("category_type", category.getType().getText());
 
         db.insert(CATEGORY_TABLE_NAME, null, contentValues);
 
@@ -64,24 +63,24 @@ public class CategoryDbHelper extends SQLiteOpenHelper {
     public boolean updateCategory(Category category) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put("title", category.getTitle());
-        contentValues.put("type", category.getType().getText());
+        contentValues.put("category_title", category.getTitle());
+        contentValues.put("category_type", category.getType().getText());
 
-        db.update(CATEGORY_TABLE_NAME, contentValues, "id = ?", new String[]{category.getId().toString()});
+        db.update(CATEGORY_TABLE_NAME, contentValues, "category_id = ?", new String[]{category.getId().toString()});
         return true;
     }
 
     public Integer deleteCategory(Category category) {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete(CATEGORY_TABLE_NAME,
-                "id = ?",
+                "category_id = ?",
                 new String[]{category.getId().toString()});
     }
 
     public List<Category> getCategories(){
         SQLiteDatabase db = this.getWritableDatabase();
 
-        Cursor res = db.query(CATEGORY_TABLE_NAME, null, null, null, null, null, "title ASC");
+        Cursor res = db.query(CATEGORY_TABLE_NAME, null, null, null, null, null, "category_title ASC");
 
         return executeQuery(res);
     }
@@ -108,7 +107,7 @@ public class CategoryDbHelper extends SQLiteOpenHelper {
 
     public void deleteCategoryById(Category category) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(CATEGORY_TABLE_NAME, "id=?", new String[]{Integer.toString(category.getId())});
+        db.delete(CATEGORY_TABLE_NAME, "category_id=?", new String[]{Integer.toString(category.getId())});
     }
 
 }

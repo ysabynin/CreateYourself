@@ -34,10 +34,9 @@ public class CategoryActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         listView = (ListView) findViewById(R.id.category_list);
-        cashflowFromDetailsActivity = (Cashflow) getIntent().getSerializableExtra("cashflow");
 
-        CategoryDbHelper cashflowDbHelper = new CategoryDbHelper(this);
-        List<Category> baseItems = cashflowDbHelper.getCategories();
+        CategoryDbHelper categoryDbHelper = new CategoryDbHelper(this);
+        List<Category> baseItems = categoryDbHelper.getCategories();
 
         CategoryListViewAdapter adapter = new CategoryListViewAdapter(this, android.R.layout.simple_list_item_1, baseItems);
         listView.setAdapter(adapter);
@@ -45,25 +44,15 @@ public class CategoryActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Cashflow template = (Cashflow) adapterView.getItemAtPosition(i);
+                Category category = (Category) adapterView.getItemAtPosition(i);
                 Intent intent = new Intent(view.getContext(), CashDetailsActivity.class);
 
-                if (cashflowFromDetailsActivity.getId() == null)
-                    intent.putExtra("template", template);
-                intent.putExtra("isFromTemplateActivity", true);
-                startActivity(intent);
+                intent.putExtra("category", category);
+                setResult(RESULT_OK, intent);
                 finish();
             }
         });
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 

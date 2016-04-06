@@ -5,9 +5,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Color;
 
 import com.kozsabynin.createyourself.domain.CashType;
 import com.kozsabynin.createyourself.domain.Cashflow;
+import com.kozsabynin.createyourself.domain.Category;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -24,7 +26,10 @@ public class CashflowDbHelper extends SQLiteOpenHelper {
     public static final String CASHFLOW_COLUMN_TYPE = "type";
     public static final String CASHFLOW_COLUMN_COST = "cost";
     public static final String CASHFLOW_COLUMN_DATE = "date";
-    public static final String CASHFLOW_COLUMN_TEMPLATE_IND = "template_ind";
+    public static final String CASHFLOW_COLUMN_CATEGORY_ID = "c_id";
+    public static final String CATEGORY_COLUMN_ID = "category_id";
+    public static final String CATEGORY_COLUMN_NAME = "category_title";
+    public static final String CATEGORY_COLUMN_TYPE = "category_type";
 
     private final String CREATE_CASHFLOW_TABLE = "create table cashflow(" +
             "id integer primary key," +
@@ -32,8 +37,9 @@ public class CashflowDbHelper extends SQLiteOpenHelper {
             " type text ," +
             " cost real," +
             " date integer," +
-            " template_ind integer)";
-
+            " template_ind integer," +
+            " c_id integer," +
+            " FOREIGN KEY(c_id) REFERENCES category(category_id));";
     public CashflowDbHelper(Context context) {
         super(context, DATABASE_NAME, null, 1);
     }
@@ -64,6 +70,7 @@ public class CashflowDbHelper extends SQLiteOpenHelper {
         contentValues.put("type", cashflow.getType().getText());
         contentValues.put("cost", cashflow.getCost());
         contentValues.put("date", millis);
+        contentValues.put("c_id", cashflow.getCategory().getId());
 
         db.insert("cashflow", null, contentValues);
 
@@ -77,6 +84,7 @@ public class CashflowDbHelper extends SQLiteOpenHelper {
         contentValues.put("type", cashflow.getType().getText());
         contentValues.put("cost", cashflow.getCost());
         contentValues.put("date", cashflow.getDate().getTimeInMillis());
+        contentValues.put("c_id", cashflow.getCategory().getId());
 
         db.update("cashflow", contentValues, "id = ?", new String[]{cashflow.getId().toString()});
         return true;
@@ -93,12 +101,15 @@ public class CashflowDbHelper extends SQLiteOpenHelper {
         List<Cashflow> cashflow = new ArrayList<>();
 
         SQLiteDatabase db = this.getWritableDatabase();
-
         Cursor res;
+/*        Cursor res = db.rawQuery("SELECT * from cashflow",null);
+        Cursor res1 = db.rawQuery("SELECT * from cashflow",null);
+        Cursor res2 = db.rawQuery("SELECT * from cashflow",null);*/
         if (cashType != null)
-            res = db.query("cashflow", null, "type = ?", new String[]{cashType.getText()}, null, null, "date DESC, cost DESC");
+            res = db.rawQuery("SELECT * FROM cashflow INNER JOIN category ON cashflow.c_id=category.category_id  WHERE TYPE = ? ORDER BY date DESC, cost DESC", new String[]{cashType.getText()});
         else
-            res = db.query("cashflow", null, null, null, null, null, "cost DESC");
+            res = db.rawQuery("SELECT * FROM cashflow INNER JOIN category ON cashflow.c_id=category.category_id  ORDER BY cost DESC", null);
+
 
         return executeQuery(res);
     }
@@ -106,7 +117,9 @@ public class CashflowDbHelper extends SQLiteOpenHelper {
     public List<Cashflow> getCashflowTemplates(){
         SQLiteDatabase db = this.getWritableDatabase();
 
-        Cursor res = db.query("cashflow", null, "template_ind = 1", null, null, null, "cost DESC");
+//        Cursor res = db.query("cashflow", null, "template_ind = 1", null, null, null, "cost DESC");
+
+        Cursor res = db.rawQuery("SELECT * FROM cashflow INNER JOIN category ON cashflow.c_id=category.category_id  ORDER BY cost", null);
 
         return executeQuery(res);
     }
@@ -129,7 +142,16 @@ public class CashflowDbHelper extends SQLiteOpenHelper {
             Calendar date = Calendar.getInstance();
             date.setTimeInMillis(millis);
 
-            cashflow.add(new Cashflow(id, name, type, cost, date));
+            //Category creation
+            int categoryId = cursor.getInt(cursor.getColumnIndex(CASHFLOW_COLUMN_CATEGORY_ID));
+            String categoryTitle = cursor.getString(cursor.getColumnIndex(CATEGORY_COLUMN_NAME)).toUpperCase();
+            int color = Color.RED;
+            String cType = cursor.getString(cursor.getColumnIndex(CATEGORY_COLUMN_TYPE));
+            CashType categoryType = ("I".equals(cType)) ? CashType.INCOME : CashType.EXPENSE;
+
+            Category category = new Category(categoryId,categoryTitle,categoryType);
+
+            cashflow.add(new Cashflow(id, name, type, cost, date,category));
 
             cursor.moveToNext();
         }

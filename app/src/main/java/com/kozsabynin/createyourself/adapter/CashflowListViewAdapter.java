@@ -1,6 +1,10 @@
 package com.kozsabynin.createyourself.adapter;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +37,7 @@ public class CashflowListViewAdapter extends ArrayAdapter<Cashflow> {
     }
 
     private class ViewHolder {
+        TextView categoryIcon;
         TextView title;
         TextView price;
         TextView date;
@@ -52,17 +57,24 @@ public class CashflowListViewAdapter extends ArrayAdapter<Cashflow> {
             TextView tv = (TextView) v.findViewById(R.id.title);
             TextView distView = (TextView) v.findViewById(R.id.price);
             TextView dateView = (TextView) v.findViewById(R.id.date);
+            TextView categoryIcon = (TextView) v.findViewById(R.id.category_icon);
 
             holder.title = tv;
             holder.price = distView;
             holder.date = dateView;
+            holder.categoryIcon = categoryIcon;
 
             v.setTag(holder);
         } else
             holder = (ViewHolder) v.getTag();
 
-        System.out.println("Position [" + position + "]");
+
         Cashflow p = baseItemsList.get(position);
+        GradientDrawable bgShape = (GradientDrawable)holder.categoryIcon.getBackground();
+        bgShape.setStroke(40, Color.BLACK);
+        String iconTitle = p.getCategory().getTitle().substring(0,1);
+        holder.categoryIcon.setText(iconTitle);
+
         holder.title.setText(p.getTitle());
         holder.price.setText("" + p.getCost());
 

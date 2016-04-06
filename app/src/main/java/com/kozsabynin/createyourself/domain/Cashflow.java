@@ -15,23 +15,26 @@ public class Cashflow implements Serializable {
     private CashType type;
     private Double cost;
     private Calendar date;
+    private Category category;
 
     public Cashflow() {
     }
 
-    public Cashflow(Integer id, String title, CashType type, Double cost, Calendar date) {
+    public Cashflow(String title, CashType type, Double cost, Calendar date, Category category) {
+        this.title = title;
+        this.type = type;
+        this.cost = cost;
+        this.date = date;
+        this.category = category;
+    }
+
+    public Cashflow(Integer id, String title, CashType type, Double cost, Calendar date, Category category) {
         this.id = id;
         this.title = title;
         this.type = type;
         this.cost = cost;
         this.date = date;
-    }
-
-    public Cashflow(String title, CashType type, Double cost, Calendar date) {
-        this.title = title;
-        this.type = type;
-        this.cost = cost;
-        this.date = date;
+        this.category = category;
     }
 
     public Integer getId() {
@@ -74,4 +77,11 @@ public class Cashflow implements Serializable {
         this.id = id;
     }
 
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
 }

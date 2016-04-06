@@ -22,6 +22,7 @@ import com.kozsabynin.createyourself.db.CashflowDbHelper;
 import com.kozsabynin.createyourself.db.TemplateDbHelper;
 import com.kozsabynin.createyourself.domain.CashType;
 import com.kozsabynin.createyourself.domain.Cashflow;
+import com.kozsabynin.createyourself.domain.Category;
 import com.kozsabynin.createyourself.domain.Template;
 import com.kozsabynin.createyourself.util.DateUtils;
 
@@ -45,6 +46,8 @@ public class CashDetailsActivity extends AppCompatActivity {
     private RadioButton incomeCheckBox;
     private CheckBox templateCheckBox;
 
+    private Category category;
+    private Template template;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,12 +66,13 @@ public class CashDetailsActivity extends AppCompatActivity {
         dateEditor = (EditText) findViewById(R.id.date_input);
         categoryEditor = (EditText) findViewById(R.id.category_editor);
 
-        incomeCheckBox = (RadioButton) findViewById(R.id.income_radio_button);
+        incomeCheckBox = (RadioButton) findViewById(R.id.category_income_radio_button);
         templateCheckBox = (CheckBox) findViewById(R.id.template_ind);
 
         bindSaveButtonEvent();
-        bindCategoryOnClickEvent();
         initFields(intent);
+
+        bindCategoryOnClickEvent();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
@@ -80,8 +84,7 @@ public class CashDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 intent.putExtra("cashflow", cashflow);
-                startActivity(intent);
-                finish();
+                startActivityForResult(intent, 1);
             }
         });
 
@@ -108,15 +111,19 @@ public class CashDetailsActivity extends AppCompatActivity {
                     cost = 0.0;
                 }
 
+                if(category == null)
+                    category = cashflow.getCategory();
+
                 if (isTemplate) {
                     TemplateDbHelper templateDbHelper = new TemplateDbHelper(context);
-                    templateDbHelper.insertTemplate(new Template(null, title, type, null, cost));
+                    templateDbHelper.insertTemplate(new Template(null, title, type, category, cost));
                 }
 
-                if (cashflow.getId() != null)
-                    cashflowDbHelper.updateCashflow(new Cashflow(cashflow.getId(), title, type, cost, curDate));
+                if (cashflow.getId() != null){
+                    cashflowDbHelper.updateCashflow(new Cashflow(cashflow.getId(), title, type,cost, curDate,category));
+                }
                 else
-                    cashflowDbHelper.insertCashflow(new Cashflow(title, type, cost, curDate));
+                    cashflowDbHelper.insertCashflow(new Cashflow(title, type, cost, curDate,category));
 
                 finish();
             }
@@ -127,6 +134,7 @@ public class CashDetailsActivity extends AppCompatActivity {
         if (cashflow.getId() != null) {
             costEditor.setText(String.valueOf(cashflow.getCost()));
             titleEditor.setText(cashflow.getTitle());
+            categoryEditor.setText(cashflow.getCategory().getTitle());
 
             incomeCheckBox.setChecked(CashType.INCOME == cashflow.getType());
             curDate = cashflow.getDate();
@@ -148,6 +156,28 @@ public class CashDetailsActivity extends AppCompatActivity {
 
         dateEditor.setText(DateUtils.getDateTextByCalendar(curDate));
     }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1) {
+            if(data != null && data.hasExtra("category")){
+                category = (Category) data.getSerializableExtra("category");
+                categoryEditor.setText(category.getTitle());
+            }
+        }
+        else if(requestCode == 2){
+            if(data != null && data.hasExtra("template")){
+                template = (Template) data.getSerializableExtra("template");
+                category = template.getCategory();
+
+                costEditor.setText(String.valueOf(template.getCost()));
+                titleEditor.setText(template.getTitle());
+                categoryEditor.setText(template.getCategory().getTitle());
+                incomeCheckBox.setChecked(CashType.INCOME == template.getType());
+            }
+        }
+    }
+
+
 
     @Override
     public void onBackPressed() {
@@ -206,9 +236,7 @@ public class CashDetailsActivity extends AppCompatActivity {
             return true;
         } else if (id == R.id.templates) {
             Intent intent = new Intent(this, TemplateActivity.class);
-            intent.putExtra("cashflow", cashflow);
-            startActivity(intent);
-            finish();
+            startActivityForResult(intent, 2);
             return true;
         } else if (id == android.R.id.home) {
             finish();

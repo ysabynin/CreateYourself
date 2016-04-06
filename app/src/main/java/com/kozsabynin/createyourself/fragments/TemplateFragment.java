@@ -3,6 +3,7 @@ package com.kozsabynin.createyourself.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -13,12 +14,15 @@ import android.widget.ListView;
 
 import com.kozsabynin.createyourself.R;
 import com.kozsabynin.createyourself.activity.CashDetailsActivity;
+import com.kozsabynin.createyourself.activity.CategoryDetailsActivity;
+import com.kozsabynin.createyourself.activity.TemplateDetails;
 import com.kozsabynin.createyourself.adapter.CashflowListViewAdapter;
 import com.kozsabynin.createyourself.adapter.TemplateListViewAdapter;
 import com.kozsabynin.createyourself.db.CashflowDbHelper;
 import com.kozsabynin.createyourself.db.TemplateDbHelper;
 import com.kozsabynin.createyourself.domain.CashType;
 import com.kozsabynin.createyourself.domain.Cashflow;
+import com.kozsabynin.createyourself.domain.Category;
 import com.kozsabynin.createyourself.domain.Template;
 
 import java.util.List;
@@ -39,13 +43,17 @@ public class TemplateFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        // Inflate the layout for this layouts.fragment
         View view = inflater.inflate(R.layout.template_fragment, container, false);
 
         listView = (ListView) view.findViewById(R.id.template_list);
 
-        TemplateDbHelper cashflowDbHelper = new TemplateDbHelper(getActivity());
-        List<Template> baseItems = cashflowDbHelper.getTemplates();
+        TemplateDbHelper templateDbHelper = new TemplateDbHelper(getActivity());
+        List<Template> baseItems = templateDbHelper.getTemplates();
+
+        FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+        fab.show();
+        showDialog(fab);
 
         adapter = new TemplateListViewAdapter(getContext(), android.R.layout.simple_list_item_1, baseItems);
         listView.setAdapter(adapter);
@@ -53,9 +61,9 @@ public class TemplateFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Cashflow cashflow = (Cashflow) adapterView.getItemAtPosition(i);
-                Intent intent = new Intent(view.getContext(), CashDetailsActivity.class);
-                intent.putExtra("cashflow", cashflow);
+                Template template = (Template) adapterView.getItemAtPosition(i);
+                Intent intent = new Intent(view.getContext(), TemplateDetails.class);
+                intent.putExtra("template", template);
                 startActivity(intent);
             }
         });
@@ -63,6 +71,17 @@ public class TemplateFragment extends Fragment {
         setHasOptionsMenu(false);
 
         return view;
+    }
+
+    private void showDialog(FloatingActionButton fab) {
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), TemplateDetails.class);
+                intent.putExtra("template", new Template());
+                startActivity(intent);
+            }
+        });
     }
 
     @Override

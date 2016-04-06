@@ -5,8 +5,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Color;
 
 import com.kozsabynin.createyourself.domain.CashType;
+import com.kozsabynin.createyourself.domain.Category;
 import com.kozsabynin.createyourself.domain.Template;
 
 import java.util.ArrayList;
@@ -22,12 +24,18 @@ public class TemplateDbHelper extends SQLiteOpenHelper {
     public static final String TEMPLATE_COLUMN_NAME = "title";
     public static final String TEMPLATE_COLUMN_TYPE = "type";
     public static final String TEMPLATE_COLUMN_COST = "cost";
-    
-    private final String CREATE_TEMPLATE_TABLE = "create table template(" +
+    public static final String TEMPLATE_COLUMN_CATEGORY_ID = "c_id";
+
+    public static final String CATEGORY_COLUMN_NAME = "category_title";
+    public static final String CATEGORY_COLUMN_TYPE = "category_type";
+
+    public static final String CREATE_TEMPLATE_TABLE = "create table template(" +
             "id integer primary key," +
             " title text," +
             " type text ," +
-            " cost real)";
+            " cost real,"+" " +
+            " c_id integer," +
+            " FOREIGN KEY(c_id) REFERENCES category(category_id));";
 
     public TemplateDbHelper(Context context) {
         super(context, DATABASE_NAME, null, 1);
@@ -56,7 +64,8 @@ public class TemplateDbHelper extends SQLiteOpenHelper {
         contentValues.put("title", template.getTitle());
         contentValues.put("type", template.getType().getText());
         contentValues.put("cost", template.getCost());
-        
+        contentValues.put("c_id", template.getCategory().getId());
+
         db.insert(TEMPLATE_TABLE_NAME, null, contentValues);
 
         return true;
@@ -69,6 +78,7 @@ public class TemplateDbHelper extends SQLiteOpenHelper {
         contentValues.put("title", template.getTitle());
         contentValues.put("type", template.getType().getText());
         contentValues.put("cost", template.getCost());
+        contentValues.put("c_id", template.getCategory().getId());
 
         db.update(TEMPLATE_TABLE_NAME, contentValues, "id = ?", new String[]{template.getId().toString()});
         return true;
@@ -84,8 +94,8 @@ public class TemplateDbHelper extends SQLiteOpenHelper {
     public List<Template> getTemplates(){
         SQLiteDatabase db = this.getWritableDatabase();
 
-        Cursor res = db.query(TEMPLATE_TABLE_NAME, null, null, null, null, null, "cost ASC");
-        
+        Cursor res = db.rawQuery("SELECT * FROM template INNER JOIN category ON template.c_id=category.category_id ORDER BY cost DESC", null);
+
         return executeQuery(res);
     }
 
@@ -103,7 +113,14 @@ public class TemplateDbHelper extends SQLiteOpenHelper {
 
             Double cost = cursor.getDouble(cursor.getColumnIndex(TEMPLATE_COLUMN_COST));
 
-            templates.add(new Template(id, name, type, null,cost));
+            //Category creation
+            int categoryId = cursor.getInt(cursor.getColumnIndex(TEMPLATE_COLUMN_CATEGORY_ID));
+            String categoryTitle = cursor.getString(cursor.getColumnIndex(CATEGORY_COLUMN_NAME)).toUpperCase();
+            String cType = cursor.getString(cursor.getColumnIndex(CATEGORY_COLUMN_TYPE));
+            CashType categoryType = ("I".equals(cType)) ? CashType.INCOME : CashType.EXPENSE;
+            Category category = new Category(categoryId,categoryTitle,categoryType);
+
+            templates.add(new Template(id, name, type, category,cost));
 
             cursor.moveToNext();
         }
