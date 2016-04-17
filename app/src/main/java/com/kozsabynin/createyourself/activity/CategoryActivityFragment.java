@@ -12,12 +12,8 @@ import android.widget.ListView;
 
 import com.kozsabynin.createyourself.R;
 import com.kozsabynin.createyourself.adapter.CategoryListViewAdapter;
-import com.kozsabynin.createyourself.adapter.TemplateListViewAdapter;
 import com.kozsabynin.createyourself.db.CategoryDbHelper;
-import com.kozsabynin.createyourself.db.TemplateDbHelper;
-import com.kozsabynin.createyourself.domain.Cashflow;
 import com.kozsabynin.createyourself.domain.Category;
-import com.kozsabynin.createyourself.domain.Template;
 
 import java.util.List;
 

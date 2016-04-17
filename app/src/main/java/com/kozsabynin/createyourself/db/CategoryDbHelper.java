@@ -23,7 +23,7 @@ public class CategoryDbHelper extends SQLiteOpenHelper {
     public static final String CATEGORY_COLUMN_NAME = "category_title";
     public static final String CATEGORY_COLUMN_TYPE = "category_type";
 
-    public static final String CREATE_CATEGORY_TABLE = "create table category(" +
+    public static final String CREATE_CATEGORY_TABLE = "create table category if not exists(" +
             "category_id integer primary key," +
             " category_title text," +
             " category_type text )";

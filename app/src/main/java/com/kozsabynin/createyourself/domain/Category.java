@@ -1,7 +1,5 @@
 package com.kozsabynin.createyourself.domain;
 
-import android.graphics.Color;
-
 import java.io.Serializable;
 
 /**

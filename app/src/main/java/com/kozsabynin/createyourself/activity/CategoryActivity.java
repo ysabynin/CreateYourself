@@ -2,8 +2,6 @@ package com.kozsabynin.createyourself.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -13,12 +11,9 @@ import android.widget.ListView;
 
 import com.kozsabynin.createyourself.R;
 import com.kozsabynin.createyourself.adapter.CategoryListViewAdapter;
-import com.kozsabynin.createyourself.adapter.TemplateListViewAdapter;
 import com.kozsabynin.createyourself.db.CategoryDbHelper;
-import com.kozsabynin.createyourself.db.TemplateDbHelper;
 import com.kozsabynin.createyourself.domain.Cashflow;
 import com.kozsabynin.createyourself.domain.Category;
-import com.kozsabynin.createyourself.domain.Template;
 
 import java.util.List;
 

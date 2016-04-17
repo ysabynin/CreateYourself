@@ -62,7 +62,8 @@ public class CategoryListViewAdapter extends ArrayAdapter<Category> {
         Category p = baseItemsList.get(position);
 
         GradientDrawable bgShape = (GradientDrawable)holder.categoryIcon.getBackground();
-        bgShape.setStroke(40, Color.RED);
+        bgShape.setStroke(40, Color.BLUE);
+        bgShape.setColor(Color.BLUE);
         String iconTitle = p.getTitle().substring(0,1);
         holder.categoryIcon.setText(iconTitle);
 

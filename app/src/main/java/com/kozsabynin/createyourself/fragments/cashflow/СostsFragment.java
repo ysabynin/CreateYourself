@@ -49,7 +49,6 @@ public class СostsFragment extends Fragment {
 
     @Override
     public void onResume() {
-
         CashflowDbHelper cashflowDbHelper = new CashflowDbHelper(getActivity());
         List<Cashflow> baseItems = cashflowDbHelper.getCashflow(CashType.EXPENSE);
 

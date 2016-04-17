@@ -1,7 +1,6 @@
 package com.kozsabynin.createyourself.domain;
 
 import java.io.Serializable;
-import java.util.Calendar;
 
 /**
  * Created by Evgeni Developer on 03.04.2016.

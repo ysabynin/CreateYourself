@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.graphics.Color;
 
 import com.kozsabynin.createyourself.domain.CashType;
 import com.kozsabynin.createyourself.domain.Category;
@@ -29,7 +28,7 @@ public class TemplateDbHelper extends SQLiteOpenHelper {
     public static final String CATEGORY_COLUMN_NAME = "category_title";
     public static final String CATEGORY_COLUMN_TYPE = "category_type";
 
-    public static final String CREATE_TEMPLATE_TABLE = "create table template(" +
+    public static final String CREATE_TEMPLATE_TABLE = "create table template if not exists(" +
             "id integer primary key," +
             " title text," +
             " type text ," +

@@ -15,7 +15,6 @@ import com.kozsabynin.createyourself.domain.Category;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -34,7 +33,7 @@ public class CashflowDbHelper extends SQLiteOpenHelper {
     public static final String CATEGORY_COLUMN_NAME = "category_title";
     public static final String CATEGORY_COLUMN_TYPE = "category_type";
 
-    private final String CREATE_CASHFLOW_TABLE = "create table cashflow(" +
+    private final String CREATE_CASHFLOW_TABLE = "create table if not exists cashflow(" +
             "id integer primary key," +
             " title text," +
             " type text ," +
@@ -43,6 +42,21 @@ public class CashflowDbHelper extends SQLiteOpenHelper {
             " template_ind integer," +
             " c_id integer," +
             " FOREIGN KEY(c_id) REFERENCES category(category_id));";
+
+    public static final String CREATE_CATEGORY_TABLE = "create table if not exists category(" +
+            "category_id integer primary key," +
+            " category_title text," +
+            " category_type text )";
+
+    public static final String CREATE_TEMPLATE_TABLE = "create table if not exists template(" +
+            "id integer primary key," +
+            " title text," +
+            " type text ," +
+            " cost real,"+" " +
+            " c_id integer," +
+            " FOREIGN KEY(c_id) REFERENCES category(category_id));";
+
+
     public CashflowDbHelper(Context context) {
         super(context, DATABASE_NAME, null, 1);
     }
@@ -50,6 +64,8 @@ public class CashflowDbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_CASHFLOW_TABLE);
+        db.execSQL(CREATE_CATEGORY_TABLE);
+        db.execSQL(CREATE_TEMPLATE_TABLE);
     }
 
     @Override
@@ -105,9 +121,7 @@ public class CashflowDbHelper extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor res;
-/*        Cursor res = db.rawQuery("SELECT * from cashflow",null);
-        Cursor res1 = db.rawQuery("SELECT * from cashflow",null);
-        Cursor res2 = db.rawQuery("SELECT * from cashflow",null);*/
+
         if (cashType != null)
             res = db.rawQuery("SELECT * FROM cashflow INNER JOIN category ON cashflow.c_id=category.category_id  WHERE TYPE = ? ORDER BY date DESC, cost DESC", new String[]{cashType.getText()});
         else
@@ -119,8 +133,6 @@ public class CashflowDbHelper extends SQLiteOpenHelper {
 
     public List<Cashflow> getCashflowTemplates(){
         SQLiteDatabase db = this.getWritableDatabase();
-
-//        Cursor res = db.query("cashflow", null, "template_ind = 1", null, null, null, "cost DESC");
 
         Cursor res = db.rawQuery("SELECT * FROM cashflow INNER JOIN category ON cashflow.c_id=category.category_id  ORDER BY cost", null);
 

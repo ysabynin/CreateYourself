@@ -12,9 +12,7 @@ import android.widget.TextView;
 
 import com.kozsabynin.createyourself.R;
 import com.kozsabynin.createyourself.domain.CashType;
-import com.kozsabynin.createyourself.domain.Cashflow;
 import com.kozsabynin.createyourself.domain.Template;
-import com.kozsabynin.createyourself.util.DateUtils;
 
 import java.util.List;
 
@@ -69,6 +67,7 @@ public class TemplateListViewAdapter extends ArrayAdapter<Template> {
 
         GradientDrawable bgShape = (GradientDrawable)holder.categoryIcon.getBackground();
         bgShape.setStroke(40, Color.BLUE);
+        bgShape.setColor(Color.BLUE);
         String iconTitle = template.getTitle().substring(0,1);
         holder.categoryIcon.setText(iconTitle);
 

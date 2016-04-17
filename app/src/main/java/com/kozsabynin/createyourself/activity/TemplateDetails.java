@@ -2,8 +2,6 @@ package com.kozsabynin.createyourself.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -12,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.Toast;
 
 import com.kozsabynin.createyourself.R;
 import com.kozsabynin.createyourself.db.TemplateDbHelper;
@@ -86,6 +85,14 @@ public class TemplateDetails extends AppCompatActivity {
                 String title = titleEditor.getText().toString();
                 CashType type = (incomeCheckBox.isChecked()) ? CashType.INCOME : CashType.EXPENSE;
                 String costLine = costEditor.getText().toString().split(" ")[0].replace(",", ".");
+
+                String categoryText = categoryEditor.getText().toString();
+                String costText = costEditor.getText().toString();
+
+                if (title.matches("") || categoryText.matches("") || costText.matches("")) {
+                    Toast.makeText(getApplicationContext(), "Одно из полей пустое", Toast.LENGTH_LONG).show();
+                    return;
+                }
 
                 Double cost = null;
 

@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,16 +12,9 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.kozsabynin.createyourself.R;
-import com.kozsabynin.createyourself.activity.CashDetailsActivity;
-import com.kozsabynin.createyourself.activity.CategoryDetailsActivity;
 import com.kozsabynin.createyourself.activity.TemplateDetails;
-import com.kozsabynin.createyourself.adapter.CashflowListViewAdapter;
 import com.kozsabynin.createyourself.adapter.TemplateListViewAdapter;
-import com.kozsabynin.createyourself.db.CashflowDbHelper;
 import com.kozsabynin.createyourself.db.TemplateDbHelper;
-import com.kozsabynin.createyourself.domain.CashType;
-import com.kozsabynin.createyourself.domain.Cashflow;
-import com.kozsabynin.createyourself.domain.Category;
 import com.kozsabynin.createyourself.domain.Template;
 
 import java.util.List;

@@ -16,6 +16,7 @@ import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.Toast;
 
 import com.kozsabynin.createyourself.R;
 import com.kozsabynin.createyourself.db.CashflowDbHelper;
@@ -99,6 +100,13 @@ public class CashDetailsActivity extends AppCompatActivity {
                 CashflowDbHelper cashflowDbHelper = new CashflowDbHelper(getApplicationContext());
 
                 String title = titleEditor.getText().toString();
+                String categoryText = categoryEditor.getText().toString();
+                String costText = costEditor.getText().toString();
+                if (title.matches("") || categoryText.matches("") || costText.matches("")) {
+                    Toast.makeText(getApplicationContext(), "Одно из полей пустое", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
                 CashType type = (incomeCheckBox.isChecked()) ? CashType.INCOME : CashType.EXPENSE;
                 String costLine = costEditor.getText().toString().split(" ")[0].replace(",", ".");
                 boolean isTemplate = (templateCheckBox.isChecked()) ? true : false;

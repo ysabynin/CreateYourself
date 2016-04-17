@@ -1,9 +1,7 @@
 package com.kozsabynin.createyourself.adapter;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
@@ -72,7 +70,8 @@ public class CashflowListViewAdapter extends ArrayAdapter<Cashflow> {
 
         Cashflow p = baseItemsList.get(position);
         GradientDrawable bgShape = (GradientDrawable) holder.categoryIcon.getBackground();
-        bgShape.setStroke(40, Color.BLACK);
+        bgShape.setStroke(40, Color.BLUE);
+        bgShape.setColor(Color.BLUE);
         String iconTitle = p.getCategory().getTitle().substring(0, 1);
         holder.categoryIcon.setText(iconTitle);
 

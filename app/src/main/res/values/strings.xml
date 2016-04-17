@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CreateYourself</string>
+    <string name="app_name">Cashflow Finance</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -28,13 +28,13 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_cash_details">CashDetailsActivity</string>
+    <string name="title_activity_cash_details">Детали операции</string>
     <string name="title_activity_history">История</string>
     <string name="title_activity_filter">Фильтрация</string>
-    <string name="title_activity_template">TemplateActivity</string>
+    <string name="title_activity_template">Шаблоны</string>
     <string name="title_activity_category">Категории</string>
-    <string name="title_activity_category_details">Редактировать категорию</string>
-    <string name="title_activity_template_details">Редактирование шаблона</string>
+    <string name="title_activity_category_details">Детали категории</string>
+    <string name="title_activity_template_details">Детали шаблона</string>
     <string name="assets">Расходы</string>
     <string name="income">Доходы</string>
     <string name="balance_report">Балансовый отчет</string>

@@ -14,7 +14,6 @@ android:background="?android:attr/activatedBackgroundIndicator" >
         android:layout_marginTop="8dp"
         android:background="@drawable/shape"
         android:gravity="center"
-        android:text="A"
         android:textColor="#FFFFFF" />
 
     <TextView

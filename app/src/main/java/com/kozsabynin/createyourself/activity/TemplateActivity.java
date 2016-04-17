@@ -10,7 +10,6 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.kozsabynin.createyourself.R;
-import com.kozsabynin.createyourself.adapter.CashflowListViewAdapter;
 import com.kozsabynin.createyourself.adapter.TemplateListViewAdapter;
 import com.kozsabynin.createyourself.db.TemplateDbHelper;
 import com.kozsabynin.createyourself.domain.Cashflow;

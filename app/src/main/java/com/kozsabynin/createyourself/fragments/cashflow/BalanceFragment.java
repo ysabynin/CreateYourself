@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
@@ -17,8 +16,6 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.formatter.PercentFormatter;
-import com.github.mikephil.charting.highlight.Highlight;
-import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.kozsabynin.createyourself.R;
 import com.kozsabynin.createyourself.db.CashflowDbHelper;
@@ -49,35 +46,84 @@ public class BalanceFragment extends Fragment {
         CashflowDbHelper cashflowDbHelper = new CashflowDbHelper(getActivity());
         List<CashflowPieChartElement> incomeItems = cashflowDbHelper.getPieChartCashflow(CashType.INCOME);
         List<CashflowPieChartElement> expenseItems = cashflowDbHelper.getPieChartCashflow(CashType.EXPENSE);
-
-        // configure pie chart
-        assetsPieChart.setUsePercentValues(true);
-
-        // enable hole and configure
-        assetsPieChart.setDrawHoleEnabled(true);
-        assetsPieChart.setHoleRadius(7);
-        assetsPieChart.setTransparentCircleRadius(10);
-
-        // enable rotation of the chart by touch
-        assetsPieChart.setRotationAngle(0);
-        assetsPieChart.setRotationEnabled(true);
-
-        incomePieChart.setUsePercentValues(true);
-
-        // enable hole and configure
-        incomePieChart.setDrawHoleEnabled(true);
-        incomePieChart.setHoleRadius(7);
-        incomePieChart.setTransparentCircleRadius(10);
-
-        // enable rotation of the chart by touch
-        incomePieChart.setRotationAngle(0);
-        incomePieChart.setRotationEnabled(true);
-        // add data
-        addDataToPieChart(incomePieChart,incomeItems);
-        addDataToPieChart(assetsPieChart,expenseItems);
-
-        // creating list of entry
         List<CashflowLineChartElement> totalAmountByMonthes = cashflowDbHelper.getLineChartCashflow();
+
+        // add data
+        addDataToPieChart(incomePieChart,incomeItems,CashType.INCOME);
+        addDataToPieChart(assetsPieChart,expenseItems,CashType.EXPENSE);
+        addDataToLineChart(totalAmountByMonthes);
+
+        return view;
+    }
+
+    private void addDataToPieChart(PieChart pieChart, List<CashflowPieChartElement> items, CashType cashType) {
+        // configure pie chart
+        pieChart.setUsePercentValues(true);
+        // enable hole and configure
+        pieChart.setDrawHoleEnabled(true);
+        pieChart.setHoleRadius(7);
+        pieChart.setTransparentCircleRadius(10);
+        // enable rotation of the chart by touch
+        pieChart.setRotationAngle(0);
+        pieChart.setRotationEnabled(true);
+
+        ArrayList<Entry> yVals1 = new ArrayList<>();
+        ArrayList<String> xVals = new ArrayList<>();
+
+        for (int i = 0; i < items.size(); i++) {
+            xVals.add(items.get(i).getTitle()+" ("+items.get(i).getTotalCost()+" р)");
+            yVals1.add(new Entry(items.get(i).getPercentage(), i));
+        }
+
+        // create pie data set
+        PieDataSet dataSet = new PieDataSet(yVals1, "оплопо олпр");
+        dataSet.setSliceSpace(3);
+        dataSet.setSelectionShift(5);
+
+        // add many colors
+        List<Integer> colors = new ArrayList<>();
+
+        if(cashType == CashType.INCOME){
+            for (int c : ColorTemplate.COLORFUL_COLORS)
+                colors.add(c);
+        } else if(cashType == CashType.EXPENSE){
+            for (int c : ColorTemplate.PASTEL_COLORS)
+                colors.add(c);
+        }
+
+/*
+
+
+        for (int c : ColorTemplate.COLORFUL_COLORS)
+            colors.add(c);
+
+        for (int c : ColorTemplate.LIBERTY_COLORS)
+            colors.add(c);
+
+        for (int c : ColorTemplate.PASTEL_COLORS)
+            colors.add(c);*/
+
+        colors.add(ColorTemplate.getHoloBlue());
+        dataSet.setColors(colors);
+
+        // instantiate pie data object now
+        PieData data = new PieData(xVals, dataSet);
+        data.setValueFormatter(new PercentFormatter());
+        data.setValueTextSize(11f);
+        data.setValueTextColor(Color.WHITE);
+
+        pieChart.setData(data);
+        pieChart.getLegend().setEnabled(false);
+        pieChart.setDescription("");
+
+        // undo all highlights
+        pieChart.highlightValues(null);
+
+        // update pie chart
+        pieChart.invalidate();
+    }
+
+    private void addDataToLineChart(List<CashflowLineChartElement> totalAmountByMonthes){
         ArrayList<Entry> entries = new ArrayList<>();
 
         for (CashflowLineChartElement lineChartElement : totalAmountByMonthes) {
@@ -107,59 +153,20 @@ public class BalanceFragment extends Fragment {
         dataset.setDrawFilled(true);
         dataset.setColors(ColorTemplate.COLORFUL_COLORS);
         balanceChart.animateY(5000);
-
-        return view;
     }
 
-    private void addDataToPieChart(PieChart pieChart, List<CashflowPieChartElement> items) {
-        ArrayList<Entry> yVals1 = new ArrayList<>();
-        ArrayList<String> xVals = new ArrayList<>();
+    @Override
+    public void onResume() {
+        CashflowDbHelper cashflowDbHelper = new CashflowDbHelper(getActivity());
+        List<CashflowPieChartElement> incomeItems = cashflowDbHelper.getPieChartCashflow(CashType.INCOME);
+        List<CashflowPieChartElement> expenseItems = cashflowDbHelper.getPieChartCashflow(CashType.EXPENSE);
+        List<CashflowLineChartElement> totalAmountByMonthes = cashflowDbHelper.getLineChartCashflow();
 
-        for (int i = 0; i < items.size(); i++) {
-            xVals.add(items.get(i).getTitle()+" ("+items.get(i).getTotalCost()+" р)");
-            yVals1.add(new Entry(items.get(i).getPercentage(), i));
-        }
+        // add data
+        addDataToPieChart(incomePieChart,incomeItems,CashType.INCOME);
+        addDataToPieChart(assetsPieChart, expenseItems, CashType.EXPENSE);
+        addDataToLineChart(totalAmountByMonthes);
 
-        // create pie data set
-        PieDataSet dataSet = new PieDataSet(yVals1, "оплопо олпр");
-        dataSet.setSliceSpace(3);
-        dataSet.setSelectionShift(5);
-
-        // add many colors
-        ArrayList<Integer> colors = new ArrayList<>();
-
-        for (int c : ColorTemplate.VORDIPLOM_COLORS)
-            colors.add(c);
-
-        for (int c : ColorTemplate.JOYFUL_COLORS)
-            colors.add(c);
-
-        for (int c : ColorTemplate.COLORFUL_COLORS)
-            colors.add(c);
-
-        for (int c : ColorTemplate.LIBERTY_COLORS)
-            colors.add(c);
-
-        for (int c : ColorTemplate.PASTEL_COLORS)
-            colors.add(c);
-
-        colors.add(ColorTemplate.getHoloBlue());
-        dataSet.setColors(colors);
-
-        // instantiate pie data object now
-        PieData data = new PieData(xVals, dataSet);
-        data.setValueFormatter(new PercentFormatter());
-        data.setValueTextSize(11f);
-        data.setValueTextColor(Color.GRAY);
-
-        pieChart.setData(data);
-        pieChart.getLegend().setEnabled(false);
-        pieChart.setDescription("");
-
-        // undo all highlights
-        pieChart.highlightValues(null);
-
-        // update pie chart
-        pieChart.invalidate();
+        super.onResume();
     }
 }
