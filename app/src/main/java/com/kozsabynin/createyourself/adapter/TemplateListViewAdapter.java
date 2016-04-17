@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.kozsabynin.createyourself.R;
+import com.kozsabynin.createyourself.domain.CashType;
 import com.kozsabynin.createyourself.domain.Cashflow;
 import com.kozsabynin.createyourself.domain.Template;
 import com.kozsabynin.createyourself.util.DateUtils;
@@ -50,7 +51,7 @@ public class TemplateListViewAdapter extends ArrayAdapter<Template> {
         if (convertView == null) {
             // This a new view we inflate the new layout
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            v = inflater.inflate(R.layout.cashflow_list_item, null);
+            v = inflater.inflate(R.layout.template_list_item, null);
             // Now we can fill the layout with the right values
             TextView tv = (TextView) v.findViewById(R.id.title);
             TextView distView = (TextView) v.findViewById(R.id.price);
@@ -72,7 +73,12 @@ public class TemplateListViewAdapter extends ArrayAdapter<Template> {
         holder.categoryIcon.setText(iconTitle);
 
         holder.title.setText(template.getTitle());
-        holder.price.setText("" + template.getCost());
+
+        int color = template.getType()== CashType.INCOME?Color.GREEN:Color.RED;
+        holder.price.setTextColor(color);
+        String sign = CashType.INCOME == template.getType() ?"+":"-";
+
+        holder.price.setText(sign + " "+template.getCost()+" руб.");
 
         return v;
     }

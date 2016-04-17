@@ -35,4 +35,7 @@
     <string name="title_activity_category">Категории</string>
     <string name="title_activity_category_details">Редактировать категорию</string>
     <string name="title_activity_template_details">Редактирование шаблона</string>
+    <string name="assets">Расходы</string>
+    <string name="income">Доходы</string>
+    <string name="balance_report">Балансовый отчет</string>
 </resources>

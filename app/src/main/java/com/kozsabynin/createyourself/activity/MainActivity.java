@@ -1,5 +1,6 @@
 package com.kozsabynin.createyourself.activity;
 
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -43,6 +44,7 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new CashflowFragment()).commit();
+        getSupportActionBar().setTitle("Поток денег");
     }
 
     @Override
@@ -88,32 +90,38 @@ public class MainActivity extends AppCompatActivity
         FrameLayout frameLayout = (FrameLayout) findViewById(R.id.content_frame);
         frameLayout.removeAllViews();
 
-/*        getSupportFragmentManager().beginTransaction().
-                remove(getSupportFragmentManager().findFragmentById(R.id.content_frame)).commit();*/
-
+        Fragment fragment = null;
+        String title = "";
         if (id == R.id.nav_camera) {
-            fm = getSupportFragmentManager();
-            fm.beginTransaction().replace(R.id.content_frame, new CashflowFragment()).commit();
+            fragment = new CashflowFragment();
+            title="Поток денег";
         } else if (id == R.id.category) {
-            fm = getSupportFragmentManager();
+            title = "Категории";
+            fragment = new CategoryActivityFragment();
+
+/*            fm = getSupportFragmentManager();
 
             fm.beginTransaction().replace(R.id.content_frame, new CategoryActivityFragment()).commit();
             Fragment fragment = getSupportFragmentManager().findFragmentByTag(String.valueOf(R.id.content_frame));
             if (fragment != null)
-                getSupportFragmentManager().beginTransaction().remove(fragment).commit();
-
-
+                getSupportFragmentManager().beginTransaction().remove(fragment).commit();*/
         } else if (id == R.id.templates) {
-            fm = getSupportFragmentManager();
-            fm.beginTransaction().replace(R.id.content_frame, new TemplateFragment()).commit();
-
+            title="Шаблоны";
+            fragment = new TemplateFragment();
         } else if (id == R.id.history) {
+            title="История";
+            fragment = new HistoryFragment();
+        }
+        if(fragment != null){
             fm = getSupportFragmentManager();
-            fm.beginTransaction().replace(R.id.content_frame, new HistoryFragment()).commit();
+            fm.beginTransaction().replace(R.id.content_frame, fragment).commit();
+            getSupportActionBar().setTitle(title);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
 }

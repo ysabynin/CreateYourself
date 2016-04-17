@@ -48,7 +48,7 @@ public class CategoryListViewAdapter extends ArrayAdapter<Category> {
         if (convertView == null) {
             // This a new view we inflate the new layout
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            v = inflater.inflate(R.layout.cashflow_list_item, null);
+            v = inflater.inflate(R.layout.category_list_item, null);
             // Now we can fill the layout with the right values
             TextView tv = (TextView) v.findViewById(R.id.title);
             TextView categoryIcon = (TextView) v.findViewById(R.id.category_icon);

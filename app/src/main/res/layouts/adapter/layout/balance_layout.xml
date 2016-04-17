@@ -1,29 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+android:id="@+id/ScrollView01"
+android:layout_width="fill_parent"
+android:layout_height="fill_parent" >
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:textSize="30sp"
-        android:gravity="center"
-        android:id="@+id/textView"
-        android:layout_centerHorizontal="true"
-        android:textColor="@android:color/holo_green_dark"
-        android:text="Balance\nFragment"/>
+<RelativeLayout
+    android:id="@+id/RelativeLayout01"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:autoLink="web"
-        android:textSize="15sp"
-        android:layout_marginTop="10dp"
-        android:layout_centerHorizontal="true"
-        android:text="евгений"
-        android:textColor="#000"
-        android:layout_below="@+id/textView"
-        android:textStyle="italic"/>
+    <LinearLayout
+        android:id="@+id/LinearLayout01"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
 
+        <TextView
+            android:id="@+id/TextView01"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dip"
+            android:text="@string/assets"
+            android:layout_gravity="center_horizontal">
+        </TextView>
+
+        <com.github.mikephil.charting.charts.PieChart
+            android:id="@+id/category_assets_pie_chart"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_alignParentTop="true" />
+
+        <TextView
+            android:id="@+id/TextView01"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dip"
+            android:text="@string/income"
+            android:layout_gravity="center_horizontal">
+        </TextView>
+
+        <com.github.mikephil.charting.charts.PieChart
+            android:id="@+id/category_income_pie_chart"
+            android:layout_width="match_parent"
+            android:layout_height="300dp" />
+
+        <TextView
+            android:id="@+id/TextView01"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dip"
+            android:text="@string/balance_report"
+            android:layout_gravity="center_horizontal">
+        </TextView>
+
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/balance_line_chart"
+            android:layout_width="match_parent"
+            android:layout_height="300dp" />
+    </LinearLayout>
 </RelativeLayout>
+
+</ScrollView>

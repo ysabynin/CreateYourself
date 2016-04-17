@@ -9,10 +9,13 @@ import android.graphics.Color;
 
 import com.kozsabynin.createyourself.domain.CashType;
 import com.kozsabynin.createyourself.domain.Cashflow;
+import com.kozsabynin.createyourself.domain.CashflowLineChartElement;
+import com.kozsabynin.createyourself.domain.CashflowPieChartElement;
 import com.kozsabynin.createyourself.domain.Category;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -162,6 +165,71 @@ public class CashflowDbHelper extends SQLiteOpenHelper {
     public void deleteCashflowById(Cashflow cashflow) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(CASHFLOW_TABLE_NAME, "id=?", new String[]{Integer.toString(cashflow.getId())});
+    }
+    private String query = "SELECT category_title,\n" +
+            "       total_sum,\n" +
+            "\t   ROUND(total_sum * 1.0/(SELECT sum(cost) from cashflow where type=?)*100) percentage\n" +
+            "FROM category JOIN (SELECT\n" +
+            "      c_id,\n" +
+            "\t  cost,\n" +
+            "      SUM(cost) as total_sum\n" +
+            "      FROM cashflow where type=?\n" +
+            "      GROUP BY c_id) sum_table ON category.category_id=sum_table.c_id\n" +
+            "GROUP BY category_id";
+
+    public List<CashflowPieChartElement> getPieChartCashflow(CashType cashType) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String cashTypeText = cashType.getText();
+        Cursor cursor = db.rawQuery(query,new String[]{cashTypeText,cashTypeText});
+
+        List<CashflowPieChartElement> cashflow = new ArrayList<>();
+
+        cursor.moveToFirst();
+
+        while (cursor.isAfterLast() == false) {
+            String title = cursor.getString(cursor.getColumnIndex("category_title"));
+            Integer sum = cursor.getInt(cursor.getColumnIndex("total_sum"));
+            Integer percentage = cursor.getInt(cursor.getColumnIndex("percentage"));
+
+            CashflowPieChartElement pieChartElement = new CashflowPieChartElement(title,sum,percentage);
+            cashflow.add(pieChartElement);
+
+            cursor.moveToNext();
+        }
+
+        return cashflow;
+    }
+
+    private static final String getCashflowByMonth = "SELECT * FROM cashflow WHERE strftime('%m',date,'unixepoch') = ?";
+
+    public List<CashflowLineChartElement> getLineChartCashflow() {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        List<CashflowLineChartElement> cashflow = new ArrayList<>();
+
+        for (int i = 1; i < 13; i++) {
+            String monthNumberText = i < 10 ? "0"+i : String.valueOf(i);
+            Cursor cursor = db.rawQuery(getCashflowByMonth,new String[]{monthNumberText});
+
+            double sum = 0;
+            cursor.moveToFirst();
+
+            while (cursor.isAfterLast() == false) {
+                Double cost = cursor.getDouble(cursor.getColumnIndex(CASHFLOW_COLUMN_COST));
+
+                String cType = cursor.getString(cursor.getColumnIndex("type"));
+                if("I".equals(cType)){
+                    sum += cost;
+                } else sum -= cost;
+
+                cursor.moveToNext();
+            }
+
+            CashflowLineChartElement lineChartElement = new CashflowLineChartElement(sum,i);
+            cashflow.add(lineChartElement);
+        }
+
+        return cashflow;
     }
 
 }

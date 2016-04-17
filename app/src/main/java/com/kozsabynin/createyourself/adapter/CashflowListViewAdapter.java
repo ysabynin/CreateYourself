@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.kozsabynin.createyourself.R;
+import com.kozsabynin.createyourself.domain.CashType;
 import com.kozsabynin.createyourself.domain.Cashflow;
 import com.kozsabynin.createyourself.util.DateUtils;
 
@@ -70,14 +71,18 @@ public class CashflowListViewAdapter extends ArrayAdapter<Cashflow> {
 
 
         Cashflow p = baseItemsList.get(position);
-        GradientDrawable bgShape = (GradientDrawable)holder.categoryIcon.getBackground();
+        GradientDrawable bgShape = (GradientDrawable) holder.categoryIcon.getBackground();
         bgShape.setStroke(40, Color.BLACK);
-        String iconTitle = p.getCategory().getTitle().substring(0,1);
+        String iconTitle = p.getCategory().getTitle().substring(0, 1);
         holder.categoryIcon.setText(iconTitle);
 
         holder.title.setText(p.getTitle());
-        holder.price.setText("" + p.getCost());
 
+        int color = p.getType()== CashType.INCOME?Color.GREEN:Color.RED;
+        holder.price.setTextColor(color);
+        String sign = CashType.INCOME == p.getType() ?"+":"-";
+
+        holder.price.setText(sign+" "+ p.getCost()+" руб.");
         String dateText = DateUtils.getDateTextByCalendar(p.getDate());
         holder.date.setText(dateText);
 
