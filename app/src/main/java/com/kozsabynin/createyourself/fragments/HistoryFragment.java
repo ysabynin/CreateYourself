@@ -48,7 +48,7 @@ public class HistoryFragment extends Fragment {
         fab.hide();
 
         CashflowDbHelper cashflowDbHelper = new CashflowDbHelper(getActivity());
-        List<Cashflow> baseItems = cashflowDbHelper.getCashflow(null);
+        List<Cashflow> baseItems = cashflowDbHelper.getAllCashflow();
 
         CashflowListViewAdapter adapter = new CashflowListViewAdapter(getContext(), android.R.layout.simple_list_item_1, baseItems);
         listView.setAdapter(adapter);
@@ -90,7 +90,7 @@ public class HistoryFragment extends Fragment {
     public void onResume() {
 
         CashflowDbHelper cashflowDbHelper = new CashflowDbHelper(getActivity());
-        List<Cashflow> baseItems = cashflowDbHelper.getCashflow(CashType.INCOME);
+        List<Cashflow> baseItems = cashflowDbHelper.getAllCashflow();
 
         adapter = new CashflowListViewAdapter(getContext(), android.R.layout.simple_list_item_1, baseItems);
         listView.setAdapter(adapter);

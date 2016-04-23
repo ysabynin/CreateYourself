@@ -52,7 +52,7 @@ public class CashflowDbHelper extends SQLiteOpenHelper {
             "id integer primary key," +
             " title text," +
             " type text ," +
-            " cost real,"+" " +
+            " cost real," + " " +
             " c_id integer," +
             " FOREIGN KEY(c_id) REFERENCES category(category_id));";
 
@@ -131,7 +131,19 @@ public class CashflowDbHelper extends SQLiteOpenHelper {
         return executeQuery(res);
     }
 
-    public List<Cashflow> getCashflowTemplates(){
+    public List<Cashflow> getAllCashflow() {
+        List<Cashflow> cashflow = new ArrayList<>();
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor res;
+
+        res = db.rawQuery("SELECT * FROM cashflow INNER JOIN category ON cashflow.c_id=category.category_id  ORDER BY date DESC, cost DESC", null);
+
+
+        return executeQuery(res);
+    }
+
+    public List<Cashflow> getCashflowTemplates() {
         SQLiteDatabase db = this.getWritableDatabase();
 
         Cursor res = db.rawQuery("SELECT * FROM cashflow INNER JOIN category ON cashflow.c_id=category.category_id  ORDER BY cost", null);
@@ -139,7 +151,7 @@ public class CashflowDbHelper extends SQLiteOpenHelper {
         return executeQuery(res);
     }
 
-    private List<Cashflow> executeQuery(Cursor cursor){
+    private List<Cashflow> executeQuery(Cursor cursor) {
         List<Cashflow> cashflow = new ArrayList<>();
 
         cursor.moveToFirst();
@@ -164,9 +176,9 @@ public class CashflowDbHelper extends SQLiteOpenHelper {
             String cType = cursor.getString(cursor.getColumnIndex(CATEGORY_COLUMN_TYPE));
             CashType categoryType = ("I".equals(cType)) ? CashType.INCOME : CashType.EXPENSE;
 
-            Category category = new Category(categoryId,categoryTitle,categoryType);
+            Category category = new Category(categoryId, categoryTitle, categoryType);
 
-            cashflow.add(new Cashflow(id, name, type, cost, date,category));
+            cashflow.add(new Cashflow(id, name, type, cost, date, category));
 
             cursor.moveToNext();
         }
@@ -178,6 +190,7 @@ public class CashflowDbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(CASHFLOW_TABLE_NAME, "id=?", new String[]{Integer.toString(cashflow.getId())});
     }
+
     private String query = "SELECT category_title,\n" +
             "       total_sum,\n" +
             "\t   ROUND(total_sum * 1.0/(SELECT sum(cost) from cashflow where type=?)*100) percentage\n" +
@@ -192,7 +205,7 @@ public class CashflowDbHelper extends SQLiteOpenHelper {
     public List<CashflowPieChartElement> getPieChartCashflow(CashType cashType) {
         SQLiteDatabase db = this.getWritableDatabase();
         String cashTypeText = cashType.getText();
-        Cursor cursor = db.rawQuery(query,new String[]{cashTypeText,cashTypeText});
+        Cursor cursor = db.rawQuery(query, new String[]{cashTypeText, cashTypeText});
 
         List<CashflowPieChartElement> cashflow = new ArrayList<>();
 
@@ -203,7 +216,7 @@ public class CashflowDbHelper extends SQLiteOpenHelper {
             Integer sum = cursor.getInt(cursor.getColumnIndex("total_sum"));
             Integer percentage = cursor.getInt(cursor.getColumnIndex("percentage"));
 
-            CashflowPieChartElement pieChartElement = new CashflowPieChartElement(title,sum,percentage);
+            CashflowPieChartElement pieChartElement = new CashflowPieChartElement(title, sum, percentage);
             cashflow.add(pieChartElement);
 
             cursor.moveToNext();
@@ -220,8 +233,8 @@ public class CashflowDbHelper extends SQLiteOpenHelper {
         List<CashflowLineChartElement> cashflow = new ArrayList<>();
 
         for (int i = 1; i < 13; i++) {
-            String monthNumberText = i < 10 ? "0"+i : String.valueOf(i);
-            Cursor cursor = db.rawQuery(getCashflowByMonth,new String[]{monthNumberText});
+            String monthNumberText = i < 10 ? "0" + i : String.valueOf(i);
+            Cursor cursor = db.rawQuery(getCashflowByMonth, new String[]{monthNumberText});
 
             double sum = 0;
             cursor.moveToFirst();
@@ -230,14 +243,14 @@ public class CashflowDbHelper extends SQLiteOpenHelper {
                 Double cost = cursor.getDouble(cursor.getColumnIndex(CASHFLOW_COLUMN_COST));
 
                 String cType = cursor.getString(cursor.getColumnIndex("type"));
-                if("I".equals(cType)){
+                if ("I".equals(cType)) {
                     sum += cost;
                 } else sum -= cost;
 
                 cursor.moveToNext();
             }
 
-            CashflowLineChartElement lineChartElement = new CashflowLineChartElement(sum,i);
+            CashflowLineChartElement lineChartElement = new CashflowLineChartElement(sum, i);
             cashflow.add(lineChartElement);
         }
 
