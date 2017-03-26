@@ -89,7 +89,7 @@ public class CashflowDbHelper extends SQLiteOpenHelper {
         contentValues.put("type", cashflow.getType().getText());
         contentValues.put("cost", cashflow.getCost());
         contentValues.put("date", millis);
-        contentValues.put("c_id", cashflow.getCategory().getId());
+        contentValues.put("c_id", cashflow.getCategory() != null ? cashflow.getCategory().getId() : null);
 
         db.insert("cashflow", null, contentValues);
 
@@ -103,7 +103,7 @@ public class CashflowDbHelper extends SQLiteOpenHelper {
         contentValues.put("type", cashflow.getType().getText());
         contentValues.put("cost", cashflow.getCost());
         contentValues.put("date", cashflow.getDate().getTimeInMillis());
-        contentValues.put("c_id", cashflow.getCategory().getId());
+        contentValues.put("c_id", cashflow.getCategory() != null ? cashflow.getCategory().getId() : null);
 
         db.update("cashflow", contentValues, "id = ?", new String[]{cashflow.getId().toString()});
         return true;
