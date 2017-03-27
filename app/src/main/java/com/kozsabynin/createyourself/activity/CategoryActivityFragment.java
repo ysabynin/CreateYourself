@@ -10,39 +10,84 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.kozsabynin.createyourself.R;
 import com.kozsabynin.createyourself.adapter.CategoryListViewAdapter;
-import com.kozsabynin.createyourself.db.CategoryDbHelper;
 import com.kozsabynin.createyourself.domain.Category;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * A placeholder layouts.fragment containing a simple view.
  */
 public class CategoryActivityFragment extends Fragment {
-    private CategoryListViewAdapter adapter = null;
-    private ListView listView;
+    ListView listView;
+    CategoryListViewAdapter adapter;
+    Set<Category> baseItems = new HashSet<>();
+
+    DatabaseReference categoryRef = FirebaseDatabase.getInstance().getReference("category");
 
     public CategoryActivityFragment() {
+    }
+
+    private void initAdapter(){
+        adapter = new CategoryListViewAdapter(getContext(), android.R.layout.simple_list_item_1, baseItems);
+        listView.setAdapter(adapter);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_category, container, false);
-
         listView = (ListView) view.findViewById(R.id.category_list);
 
         FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
         fab.show();
         showDialog(fab);
 
-        CategoryDbHelper categoryDbHelper = new CategoryDbHelper(getActivity());
-        List<Category> baseItems = categoryDbHelper.getCategories();
+        initAdapter();
 
-        adapter = new CategoryListViewAdapter(getContext(), android.R.layout.simple_list_item_1, baseItems);
-        listView.setAdapter(adapter);
+        categoryRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Category category = dataSnapshot.getValue(Category.class);
+                baseItems.add(category);
+                initAdapter();
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                Category category = dataSnapshot.getValue(Category.class);
+                baseItems.remove(category);
+                baseItems.add(category);
+                initAdapter();
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                Category category = dataSnapshot.getValue(Category.class);
+                baseItems.remove(category);
+                initAdapter();
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -68,7 +113,8 @@ public class CategoryActivityFragment extends Fragment {
         });
     }
 
-    @Override
+
+/*    @Override
     public void onResume() {
         CategoryDbHelper cashflowDbHelper = new CategoryDbHelper(getActivity());
         List<Category> baseItems = cashflowDbHelper.getCategories();
@@ -79,5 +125,5 @@ public class CategoryActivityFragment extends Fragment {
         adapter.notifyDataSetChanged();
 
         super.onResume();
-    }
+    }*/
 }

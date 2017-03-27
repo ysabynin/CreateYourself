@@ -15,11 +15,13 @@ import com.kozsabynin.createyourself.db.CategoryDbHelper;
 import com.kozsabynin.createyourself.domain.Cashflow;
 import com.kozsabynin.createyourself.domain.Category;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class CategoryActivity extends AppCompatActivity {
     private ListView listView;
     private Cashflow cashflowFromDetailsActivity;
+    Set<Category> baseItems = new HashSet<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +33,7 @@ public class CategoryActivity extends AppCompatActivity {
         listView = (ListView) findViewById(R.id.category_list);
 
         CategoryDbHelper categoryDbHelper = new CategoryDbHelper(this);
-        List<Category> baseItems = categoryDbHelper.getCategories();
+//        Set<CategoryDTO> baseItems = categoryDbHelper.getCategories();
 
         CategoryListViewAdapter adapter = new CategoryListViewAdapter(this, android.R.layout.simple_list_item_1, baseItems);
         listView.setAdapter(adapter);

@@ -13,10 +13,15 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.kozsabynin.createyourself.R;
 import com.kozsabynin.createyourself.db.CategoryDbHelper;
 import com.kozsabynin.createyourself.domain.CashType;
 import com.kozsabynin.createyourself.domain.Category;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class CategoryDetailsActivity extends AppCompatActivity {
 
@@ -25,6 +30,8 @@ public class CategoryDetailsActivity extends AppCompatActivity {
     private RadioButton incomeCheckBox;
 
     private Category category;
+
+    DatabaseReference categoryRef = FirebaseDatabase.getInstance().getReference("category");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +59,7 @@ public class CategoryDetailsActivity extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CategoryDbHelper categoryDbHelper = new CategoryDbHelper(getApplicationContext());
+//                CategoryDbHelper categoryDbHelper = new CategoryDbHelper(getApplicationContext());
 
                 String title = titleEditor.getText().toString();
                 if (title.matches("")) {
@@ -61,10 +68,24 @@ public class CategoryDetailsActivity extends AppCompatActivity {
                 }
                 CashType type = (incomeCheckBox.isChecked()) ? CashType.INCOME : CashType.EXPENSE;
 
-                if (category.getId() != null)
-                    categoryDbHelper.updateCategory(new Category(category.getId(), title, type));
-                else
-                    categoryDbHelper.insertCategory(new Category(title, type));
+                if (category.getId() != null) {
+//                    categoryDbHelper.updateCategory(new Category(category.getId(), title, type));
+
+                    String id = category.getId();
+                    Category category = new Category(id, title, type);
+                    Map<String, Object> categoryValue = new HashMap<>();/*category.toMap();*/
+                    categoryValue.put("/" + id, category.toMap());
+                    categoryRef.updateChildren(categoryValue);
+                }
+                else {
+                    String id = categoryRef.push().getKey();
+                    Category category = new Category(id, title, type);
+                    Map<String, Object> categoryValue = new HashMap<>();/*category.toMap();*/
+                    categoryValue.put("/" + id, category.toMap());
+                    categoryRef.updateChildren(categoryValue);
+
+//                    categoryDbHelper.insertCategory(new Category(title, type));
+                }
 
                 finish();
             }
@@ -74,9 +95,9 @@ public class CategoryDetailsActivity extends AppCompatActivity {
     public void initFields(Intent intent) {
         if (category.getId() != null) {
             titleEditor.setText(category.getTitle());
-            incomeCheckBox.setChecked(CashType.INCOME == category.getType());
+            incomeCheckBox.setChecked(CashType.INCOME == category.getCashType());
         } else {
-            incomeCheckBox.setChecked(CashType.INCOME == category.getType());
+            incomeCheckBox.setChecked(CashType.INCOME == category.getCashType());
         }
     }
 
@@ -94,9 +115,10 @@ public class CategoryDetailsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.delete) {
+        if (id == R.id.delete && category.getId() != null) {
             CategoryDbHelper categoryDbHelper = new CategoryDbHelper(getApplicationContext());
-            categoryDbHelper.deleteCategory(category);
+//            categoryDbHelper.deleteCategory(category);
+            categoryRef.child(category.getId()).removeValue();
             finish();
             return true;
         } else if (id == android.R.id.home) {

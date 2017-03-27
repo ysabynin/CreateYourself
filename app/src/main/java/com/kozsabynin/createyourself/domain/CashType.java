@@ -16,4 +16,9 @@ public enum CashType {
     public String getText() {
         return text;
     }
+
+    public static CashType getByText(String text){
+        return "I".equals(text) ? INCOME : EXPENSE;
+    }
+
 }
