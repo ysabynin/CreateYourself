@@ -11,7 +11,6 @@ import com.kozsabynin.createyourself.domain.CashType;
 import com.kozsabynin.createyourself.domain.Cashflow;
 import com.kozsabynin.createyourself.domain.CashflowLineChartElement;
 import com.kozsabynin.createyourself.domain.CashflowPieChartElement;
-import com.kozsabynin.createyourself.domain.Category;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -82,11 +81,11 @@ public class CashflowDbHelper extends SQLiteOpenHelper {
     public boolean insertCashflow(Cashflow cashflow) {
         SQLiteDatabase db = this.getWritableDatabase();
 
-        long millis = cashflow.getDate().getTimeInMillis();
+        long millis = cashflow.getDate();
 
         ContentValues contentValues = new ContentValues();
         contentValues.put("title", cashflow.getTitle());
-        contentValues.put("type", cashflow.getType().getText());
+        contentValues.put("type", cashflow.getType());
         contentValues.put("cost", cashflow.getCost());
         contentValues.put("date", millis);
         contentValues.put("c_id", cashflow.getCategory() != null ? cashflow.getCategory().getId() : null);
@@ -100,9 +99,9 @@ public class CashflowDbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("title", cashflow.getTitle());
-        contentValues.put("type", cashflow.getType().getText());
+        contentValues.put("type", cashflow.getType());
         contentValues.put("cost", cashflow.getCost());
-        contentValues.put("date", cashflow.getDate().getTimeInMillis());
+        contentValues.put("date", cashflow.getDate());
         contentValues.put("c_id", cashflow.getCategory() != null ? cashflow.getCategory().getId() : null);
 
         db.update("cashflow", contentValues, "id = ?", new String[]{cashflow.getId().toString()});
@@ -176,9 +175,9 @@ public class CashflowDbHelper extends SQLiteOpenHelper {
             String cType = cursor.getString(cursor.getColumnIndex(CATEGORY_COLUMN_TYPE));
             CashType categoryType = ("I".equals(cType)) ? CashType.INCOME : CashType.EXPENSE;
 
-            Category category = new Category(categoryId, categoryTitle, categoryType);
+/*            Category category = new Category(categoryId, categoryTitle, categoryType);
 
-            cashflow.add(new Cashflow(id, name, type, cost, date, category));
+            cashflow.add(new Cashflow(id, name, type, cost, date, category));*/
 
             cursor.moveToNext();
         }
@@ -187,8 +186,8 @@ public class CashflowDbHelper extends SQLiteOpenHelper {
     }
 
     public void deleteCashflowById(Cashflow cashflow) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(CASHFLOW_TABLE_NAME, "id=?", new String[]{Integer.toString(cashflow.getId())});
+/*        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(CASHFLOW_TABLE_NAME, "id=?", new String[]{Integer.toString(cashflow.getId())});*/
     }
 
     private String query = "SELECT category_title,\n" +

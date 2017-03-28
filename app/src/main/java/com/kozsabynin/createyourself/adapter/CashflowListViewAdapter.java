@@ -15,7 +15,10 @@ import com.kozsabynin.createyourself.domain.CashType;
 import com.kozsabynin.createyourself.domain.Cashflow;
 import com.kozsabynin.createyourself.util.DateUtils;
 
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Evgeni Developer on 03.03.2016.
@@ -27,11 +30,11 @@ public class CashflowListViewAdapter extends ArrayAdapter<Cashflow> {
     private SparseBooleanArray mSelectedItemsIds;
 
     public CashflowListViewAdapter(Context context, int resourceId,
-                                   List<Cashflow> baseItemsList) {
-        super(context, resourceId, baseItemsList);
+                                   Set<Cashflow> baseItemsList) {
+        super(context, resourceId, new ArrayList<>(baseItemsList));
         mSelectedItemsIds = new SparseBooleanArray();
         this.context = context;
-        this.baseItemsList = baseItemsList;
+        this.baseItemsList = new ArrayList<>(baseItemsList);
         inflater = LayoutInflater.from(context);
     }
 
@@ -72,17 +75,21 @@ public class CashflowListViewAdapter extends ArrayAdapter<Cashflow> {
         GradientDrawable bgShape = (GradientDrawable) holder.categoryIcon.getBackground();
         bgShape.setStroke(40, Color.BLUE);
         bgShape.setColor(Color.BLUE);
+        //TODO: add check for npe
         String iconTitle = p.getCategory().getTitle().substring(0, 1);
         holder.categoryIcon.setText(iconTitle);
 
         holder.title.setText(p.getTitle());
 
-        int color = p.getType()== CashType.INCOME?Color.GREEN:Color.RED;
+        int color = p.getType()== CashType.INCOME.getText()?Color.GREEN:Color.RED;
         holder.price.setTextColor(color);
-        String sign = CashType.INCOME == p.getType() ?"+":"-";
+        String sign = CashType.INCOME.getText() == p.getType() ?"+":"-";
 
-        holder.price.setText(sign+" "+ p.getCost()+" руб.");
-        String dateText = DateUtils.getDateTextByCalendar(p.getDate());
+        holder.price.setText(sign + " " + p.getCost() + " руб.");
+
+        Calendar tempCalendar = Calendar.getInstance();
+        tempCalendar.setTimeInMillis(p.getDate());
+        String dateText = DateUtils.getDateTextByCalendar(tempCalendar);
         holder.date.setText(dateText);
 
         return v;

@@ -17,10 +17,10 @@ import com.kozsabynin.createyourself.R;
 import com.kozsabynin.createyourself.activity.CashDetailsActivity;
 import com.kozsabynin.createyourself.adapter.CashflowListViewAdapter;
 import com.kozsabynin.createyourself.db.CashflowDbHelper;
-import com.kozsabynin.createyourself.domain.CashType;
 import com.kozsabynin.createyourself.domain.Cashflow;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -34,6 +34,7 @@ public class HistoryFragment extends Fragment {
 
     private CashflowListViewAdapter adapter = null;
     private ListView listView;
+    Set<Cashflow> baseItems = new HashSet<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -48,7 +49,7 @@ public class HistoryFragment extends Fragment {
         fab.hide();
 
         CashflowDbHelper cashflowDbHelper = new CashflowDbHelper(getActivity());
-        List<Cashflow> baseItems = cashflowDbHelper.getAllCashflow();
+//        baseItems = cashflowDbHelper.getAllCashflow();
 
         CashflowListViewAdapter adapter = new CashflowListViewAdapter(getContext(), android.R.layout.simple_list_item_1, baseItems);
         listView.setAdapter(adapter);
@@ -86,7 +87,7 @@ public class HistoryFragment extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
     }
 
-    @Override
+/*    @Override
     public void onResume() {
 
         CashflowDbHelper cashflowDbHelper = new CashflowDbHelper(getActivity());
@@ -98,6 +99,6 @@ public class HistoryFragment extends Fragment {
         adapter.notifyDataSetChanged();
 
         super.onResume();
-    }
+    }*/
 
 }

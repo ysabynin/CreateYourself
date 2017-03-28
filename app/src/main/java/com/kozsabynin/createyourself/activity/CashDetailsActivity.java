@@ -18,9 +18,10 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.kozsabynin.createyourself.R;
 import com.kozsabynin.createyourself.db.CashflowDbHelper;
-import com.kozsabynin.createyourself.db.TemplateDbHelper;
 import com.kozsabynin.createyourself.domain.CashType;
 import com.kozsabynin.createyourself.domain.Cashflow;
 import com.kozsabynin.createyourself.domain.Category;
@@ -28,7 +29,9 @@ import com.kozsabynin.createyourself.domain.Template;
 import com.kozsabynin.createyourself.util.DateUtils;
 
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 public class CashDetailsActivity extends AppCompatActivity {
 
@@ -49,6 +52,9 @@ public class CashDetailsActivity extends AppCompatActivity {
 
     private Category category;
     private Template template;
+
+    DatabaseReference cashflowRef = FirebaseDatabase.getInstance().getReference("cashflow");
+    DatabaseReference templateRef = FirebaseDatabase.getInstance().getReference("template");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,16 +129,34 @@ public class CashDetailsActivity extends AppCompatActivity {
                     category = cashflow.getCategory();
 
                 if (isTemplate) {
-                    TemplateDbHelper templateDbHelper = new TemplateDbHelper(context);
-                    templateDbHelper.insertTemplate(new Template(null, title, type, category, cost));
+    /*                TemplateDbHelper templateDbHelper = new TemplateDbHelper(context);
+                    templateDbHelper.insertTemplate(new Template(null, title, type, category, cost));*/
+
+                    String id = templateRef.push().getKey();
+                    Template sendTemplate = new Template(id, title, type, category, cost);
+                    Map<String, Object> child = new HashMap<>();
+                    child.put("/" + id, sendTemplate.toMap());
+                    templateRef.updateChildren(child);
                 }
 
                 if (cashflow.getId() != null){
-                    cashflowDbHelper.updateCashflow(new Cashflow(cashflow.getId(), title, type,cost, curDate,category));
-                }
-                else
-                    cashflowDbHelper.insertCashflow(new Cashflow(title, type, cost, curDate,category));
+//                    cashflowDbHelper.updateCashflow(new Cashflow(cashflow.getId(), title, type,cost, curDate,category));
 
+                    String id = cashflow.getId();
+                    Cashflow sendCashflow = new Cashflow(cashflow.getId(), title, type,cost, curDate,category);
+                    Map<String, Object> cashflowValue = new HashMap<>();/*category.toMap();*/
+                    cashflowValue.put("/" + id, sendCashflow.toMap());
+                    cashflowRef.updateChildren(cashflowValue);
+                }
+                else {
+//                    cashflowDbHelper.insertCashflow(new Cashflow(title, type, cost, curDate, category));
+
+                    String id = cashflowRef.push().getKey();
+                    Cashflow sendCashflow = new Cashflow(id, title, type, cost, curDate, category);
+                    Map<String, Object> cashflowValue = new HashMap<>();
+                    cashflowValue.put("/" + id, sendCashflow.toMap());
+                    cashflowRef.updateChildren(cashflowValue);
+                }
                 finish();
             }
         });
@@ -144,8 +168,10 @@ public class CashDetailsActivity extends AppCompatActivity {
             titleEditor.setText(cashflow.getTitle());
             categoryEditor.setText(cashflow.getCategory().getTitle());
 
-            incomeCheckBox.setChecked(CashType.INCOME == cashflow.getType());
-            curDate = cashflow.getDate();
+            incomeCheckBox.setChecked(CashType.INCOME.getText() == cashflow.getType());
+            Calendar tempCalendar = Calendar.getInstance();
+            tempCalendar.setTimeInMillis(cashflow.getDate());
+            curDate = tempCalendar;
 
         } else if (intent.hasExtra("isFromTemplateActivity")) {
             cashflow.setId(null);
@@ -153,11 +179,11 @@ public class CashDetailsActivity extends AppCompatActivity {
             costEditor.setText(String.valueOf(cashflow.getCost()));
             titleEditor.setText(cashflow.getTitle());
 
-            incomeCheckBox.setChecked(CashType.INCOME == cashflow.getType());
+            incomeCheckBox.setChecked(CashType.INCOME.getText() == cashflow.getType());
             curDate = Calendar.getInstance();
         } else {
             costEditor.setText("0.0");
-            incomeCheckBox.setChecked(CashType.INCOME == cashflow.getType());
+            incomeCheckBox.setChecked(CashType.INCOME.getText() == cashflow.getType());
 
             curDate = Calendar.getInstance();
         }
@@ -180,7 +206,7 @@ public class CashDetailsActivity extends AppCompatActivity {
                 costEditor.setText(String.valueOf(template.getCost()));
                 titleEditor.setText(template.getTitle());
                 categoryEditor.setText(template.getCategory().getTitle());
-                incomeCheckBox.setChecked(CashType.INCOME == template.getType());
+                incomeCheckBox.setChecked(CashType.INCOME.getText() == template.getType());
             }
         }
     }
@@ -238,8 +264,9 @@ public class CashDetailsActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.delete) {
-            CashflowDbHelper cashflowDbHelper = new CashflowDbHelper(getApplicationContext());
-            cashflowDbHelper.deleteCashflowById(cashflow);
+/*            CashflowDbHelper cashflowDbHelper = new CashflowDbHelper(getApplicationContext());
+            cashflowDbHelper.deleteCashflowById(cashflow);*/
+            cashflowRef.child(cashflow.getId()).removeValue();
             finish();
             return true;
         } else if (id == R.id.templates) {

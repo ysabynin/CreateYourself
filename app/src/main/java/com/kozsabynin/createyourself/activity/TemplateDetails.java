@@ -121,7 +121,7 @@ public class TemplateDetails extends AppCompatActivity {
             costEditor.setText(String.valueOf(template.getCost()));
             titleEditor.setText(template.getTitle());
             categoryEditor.setText(template.getCategory().getTitle());
-            incomeCheckBox.setChecked(CashType.INCOME == template.getType());
+            incomeCheckBox.setChecked(CashType.INCOME.getText() == template.getType());
 
         }
     }

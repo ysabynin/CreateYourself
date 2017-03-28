@@ -61,7 +61,7 @@ public class TemplateDbHelper extends SQLiteOpenHelper {
         
         ContentValues contentValues = new ContentValues();
         contentValues.put("title", template.getTitle());
-        contentValues.put("type", template.getType().getText());
+        contentValues.put("type", template.getType());
         contentValues.put("cost", template.getCost());
         contentValues.put("c_id", template.getCategory().getId());
 
@@ -75,7 +75,7 @@ public class TemplateDbHelper extends SQLiteOpenHelper {
         
         ContentValues contentValues = new ContentValues();
         contentValues.put("title", template.getTitle());
-        contentValues.put("type", template.getType().getText());
+//        contentValues.put("type", template.getType()));
         contentValues.put("cost", template.getCost());
         contentValues.put("c_id", template.getCategory().getId());
 
@@ -117,9 +117,9 @@ public class TemplateDbHelper extends SQLiteOpenHelper {
             String categoryTitle = cursor.getString(cursor.getColumnIndex(CATEGORY_COLUMN_NAME)).toUpperCase();
             String cType = cursor.getString(cursor.getColumnIndex(CATEGORY_COLUMN_TYPE));
             CashType categoryType = ("I".equals(cType)) ? CashType.INCOME : CashType.EXPENSE;
-            Category category = new Category(categoryId,categoryTitle,categoryType);
+            Category category = new Category(new String(),categoryTitle,categoryType);
 
-            templates.add(new Template(id, name, type, category,cost));
+//            templates.add(new Template(id, name, type, category,cost));
 
             cursor.moveToNext();
         }
@@ -129,7 +129,7 @@ public class TemplateDbHelper extends SQLiteOpenHelper {
 
     public void deleteTemplateById(Template template) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TEMPLATE_TABLE_NAME, "id=?", new String[]{Integer.toString(template.getId())});
+//        db.delete(TEMPLATE_TABLE_NAME, "id=?", new String[]{Integer.toString(template.getId())});
     }
 
 }

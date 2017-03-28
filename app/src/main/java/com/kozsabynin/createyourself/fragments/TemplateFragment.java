@@ -11,26 +11,37 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.kozsabynin.createyourself.R;
 import com.kozsabynin.createyourself.activity.TemplateDetails;
 import com.kozsabynin.createyourself.adapter.TemplateListViewAdapter;
-import com.kozsabynin.createyourself.db.TemplateDbHelper;
 import com.kozsabynin.createyourself.domain.Template;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class TemplateFragment extends Fragment {
-
+    private TemplateListViewAdapter adapter = null;
+    private ListView listView;
+    private Set<Template> baseItems = new HashSet<>();
+    DatabaseReference templateRef = FirebaseDatabase.getInstance().getReference("template");
 
     public TemplateFragment() {
         // Required empty public constructor
     }
 
-    private TemplateListViewAdapter adapter = null;
-    private ListView listView;
+
+    private void initAdapter() {
+        adapter = new TemplateListViewAdapter(getContext(), android.R.layout.simple_list_item_1, baseItems);
+        listView.setAdapter(adapter);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -40,15 +51,12 @@ public class TemplateFragment extends Fragment {
 
         listView = (ListView) view.findViewById(R.id.template_list);
 
-        TemplateDbHelper templateDbHelper = new TemplateDbHelper(getActivity());
-        List<Template> baseItems = templateDbHelper.getTemplates();
-
+//        TemplateDbHelper templateDbHelper = new TemplateDbHelper(getActivity());
         FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
         fab.show();
         showDialog(fab);
 
-        adapter = new TemplateListViewAdapter(getContext(), android.R.layout.simple_list_item_1, baseItems);
-        listView.setAdapter(adapter);
+        initAdapter();
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -59,6 +67,47 @@ public class TemplateFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
+        templateRef.addChildEventListener(
+                new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                        Template template = dataSnapshot.getValue(Template.class);
+                        baseItems.add(template);
+                        initAdapter();
+                        adapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                        Template template = dataSnapshot.getValue(Template.class);
+                        baseItems.remove(template);
+                        baseItems.add(template);
+                        initAdapter();
+                        adapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+                        Template template = dataSnapshot.getValue(Template.class);
+                        baseItems.remove(template);
+                        initAdapter();
+                        adapter.notifyDataSetChanged();
+                    }
+
+
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                }
+
+        );
 
         setHasOptionsMenu(false);
 
@@ -76,7 +125,7 @@ public class TemplateFragment extends Fragment {
         });
     }
 
-    @Override
+/*    @Override
     public void onResume() {
 
         TemplateDbHelper cashflowDbHelper = new TemplateDbHelper(getActivity());
@@ -88,6 +137,6 @@ public class TemplateFragment extends Fragment {
         adapter.notifyDataSetChanged();
 
         super.onResume();
-    }
+    }*/
 
 }

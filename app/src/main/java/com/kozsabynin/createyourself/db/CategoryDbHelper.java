@@ -53,7 +53,7 @@ public class CategoryDbHelper extends SQLiteOpenHelper {
         
         ContentValues contentValues = new ContentValues();
         contentValues.put("category_title", category.getTitle());
-        contentValues.put("category_type", category.getType().getText());
+        contentValues.put("category_type", category.getCashType().getText());
 
         db.insert(CATEGORY_TABLE_NAME, null, contentValues);
 
@@ -64,7 +64,7 @@ public class CategoryDbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("category_title", category.getTitle());
-        contentValues.put("category_type", category.getType().getText());
+        contentValues.put("category_type", category.getCashType().getText());
 
         db.update(CATEGORY_TABLE_NAME, contentValues, "category_id = ?", new String[]{category.getId().toString()});
         return true;
@@ -97,7 +97,7 @@ public class CategoryDbHelper extends SQLiteOpenHelper {
             String bdType = cursor.getString(cursor.getColumnIndex(CATEGORY_COLUMN_TYPE));
             CashType type = ("I".equals(bdType)) ? CashType.INCOME : CashType.EXPENSE;
 
-            category.add(new Category(id, name, type));
+            category.add(new Category(String.valueOf(id), name, type));
 
             cursor.moveToNext();
         }
@@ -107,7 +107,7 @@ public class CategoryDbHelper extends SQLiteOpenHelper {
 
     public void deleteCategoryById(Category category) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(CATEGORY_TABLE_NAME, "category_id=?", new String[]{Integer.toString(category.getId())});
+        db.delete(CATEGORY_TABLE_NAME, "category_id=?", new String[]{category.getId()});
     }
 
 }

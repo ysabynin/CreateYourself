@@ -14,7 +14,9 @@ import com.kozsabynin.createyourself.R;
 import com.kozsabynin.createyourself.domain.CashType;
 import com.kozsabynin.createyourself.domain.Template;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Evgeni Developer on 03.04.2016.
@@ -26,11 +28,11 @@ public class TemplateListViewAdapter extends ArrayAdapter<Template> {
     private SparseBooleanArray mSelectedItemsIds;
 
     public TemplateListViewAdapter(Context context, int resourceId,
-                                   List<Template> baseItemsList) {
-        super(context, resourceId, baseItemsList);
+                                   Set<Template> baseItemsList) {
+        super(context, resourceId, new ArrayList<>(baseItemsList));
         mSelectedItemsIds = new SparseBooleanArray();
         this.context = context;
-        this.baseItemsList = baseItemsList;
+        this.baseItemsList = new ArrayList<>(baseItemsList);
         inflater = LayoutInflater.from(context);
     }
 
@@ -73,9 +75,9 @@ public class TemplateListViewAdapter extends ArrayAdapter<Template> {
 
         holder.title.setText(template.getTitle());
 
-        int color = template.getType()== CashType.INCOME?Color.GREEN:Color.RED;
+        int color = template.getType()== CashType.INCOME.getText()?Color.GREEN:Color.RED;
         holder.price.setTextColor(color);
-        String sign = CashType.INCOME == template.getType() ?"+":"-";
+        String sign = CashType.INCOME.getText() == template.getType() ?"+":"-";
 
         holder.price.setText(sign + " "+template.getCost()+" руб.");
 
