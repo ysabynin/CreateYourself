@@ -7,6 +7,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Color;
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.kozsabynin.createyourself.domain.CashType;
 import com.kozsabynin.createyourself.domain.Cashflow;
 import com.kozsabynin.createyourself.domain.CashflowLineChartElement;
@@ -14,12 +20,18 @@ import com.kozsabynin.createyourself.domain.CashflowPieChartElement;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 
 /**
  * Created by Evgeni Developer on 26.03.2016.
  */
 public class CashflowDbHelper extends SQLiteOpenHelper {
+    DatabaseReference cashflowRef = FirebaseDatabase.getInstance().getReference("cashflow");
+
     public static final String DATABASE_NAME = "CreateYourself.db";
     public static final String CASHFLOW_TABLE_NAME = "cashflow";
     public static final String CASHFLOW_COLUMN_ID = "id";
@@ -190,6 +202,29 @@ public class CashflowDbHelper extends SQLiteOpenHelper {
         db.delete(CASHFLOW_TABLE_NAME, "id=?", new String[]{Integer.toString(cashflow.getId())});*/
     }
 
+    public Set<Cashflow> getCashflowWithType(String cashTypeText){
+        final Set<Cashflow> baseItems = new HashSet<>();
+
+        cashflowRef.child("type").equalTo(cashTypeText).addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
+                        for (Map.Entry<String, Object> entry : map.entrySet()) {
+                            baseItems.add((Cashflow)entry.getValue());
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                }
+        );
+
+        return baseItems;
+    }
+
     private String query = "SELECT category_title,\n" +
             "       total_sum,\n" +
             "\t   ROUND(total_sum * 1.0/(SELECT sum(cost) from cashflow where type=?)*100) percentage\n" +
@@ -201,27 +236,43 @@ public class CashflowDbHelper extends SQLiteOpenHelper {
             "      GROUP BY c_id) sum_table ON category.category_id=sum_table.c_id\n" +
             "GROUP BY category_id";
 
-    public List<CashflowPieChartElement> getPieChartCashflow(CashType cashType) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        String cashTypeText = cashType.getText();
-        Cursor cursor = db.rawQuery(query, new String[]{cashTypeText, cashTypeText});
-
-        List<CashflowPieChartElement> cashflow = new ArrayList<>();
-
-        cursor.moveToFirst();
-
-        while (cursor.isAfterLast() == false) {
-            String title = cursor.getString(cursor.getColumnIndex("category_title"));
-            Integer sum = cursor.getInt(cursor.getColumnIndex("total_sum"));
-            Integer percentage = cursor.getInt(cursor.getColumnIndex("percentage"));
-
-            CashflowPieChartElement pieChartElement = new CashflowPieChartElement(title, sum, percentage);
-            cashflow.add(pieChartElement);
-
-            cursor.moveToNext();
+    private Double getSum(Set<Cashflow> cashflowList){
+        Double result = null;
+        for (Cashflow cash : cashflowList) {
+            result += cash.getCost();
         }
+        return result;
+    }
 
-        return cashflow;
+    private CashflowPieChartElement getByCategory(Set<CashflowPieChartElement> cashflow, String title){
+        for (CashflowPieChartElement operation : cashflow) {
+            if(operation.equals(title))
+                return operation;
+        }
+        return null;
+    }
+
+    public Set<CashflowPieChartElement> getPieChartCashflow(CashType cashType) {
+        Set<CashflowPieChartElement> pieChartElements = new HashSet<>();
+
+/*        String cashTypeText = cashType.getText();
+
+        Set<Cashflow> charges = getCashflowWithType(cashTypeText);
+        Double sum = getSum(charges);
+
+        for (Cashflow charge : charges) {
+            CashflowPieChartElement element = getByCategory(pieChartElements, charge.getTitle());
+            if(element != null){
+                double newCost = element.getTotalCost() + charge.getCost();
+                element.setTotalCost(newCost);
+                int  newPercentage = (int)(newCost / sum);
+                element.setPercentage(newPercentage);
+            } else {
+                pieChartElements.add(new CashflowPieChartElement(charge.getTitle(),0,0));
+            }
+        }*/
+
+        return pieChartElements;
     }
 
     private static final String getCashflowByMonth = "SELECT * FROM cashflow WHERE strftime('%m',date,'unixepoch') = ?";

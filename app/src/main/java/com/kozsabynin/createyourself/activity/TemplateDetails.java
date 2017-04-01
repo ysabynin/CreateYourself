@@ -12,11 +12,18 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.kozsabynin.createyourself.R;
 import com.kozsabynin.createyourself.db.TemplateDbHelper;
+import com.kozsabynin.createyourself.db.TemplateFirebaseService;
 import com.kozsabynin.createyourself.domain.CashType;
+import com.kozsabynin.createyourself.domain.Cashflow;
 import com.kozsabynin.createyourself.domain.Category;
 import com.kozsabynin.createyourself.domain.Template;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class TemplateDetails extends AppCompatActivity {
     private EditText costEditor;
@@ -27,6 +34,9 @@ public class TemplateDetails extends AppCompatActivity {
 
     private Category category;
     private Template template;
+
+    DatabaseReference templateRef = FirebaseDatabase.getInstance().getReference("template");
+    TemplateFirebaseService templateFirebaseService = new TemplateFirebaseService();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,15 +112,18 @@ public class TemplateDetails extends AppCompatActivity {
                     cost = 0.0;
                 }
 
-                if(category == null)
+                if (category == null)
                     category = template.getCategory();
 
-                if (template != null && template.getId() != null){
-                    templateDbHelper.updateTemplate(new Template(template.getId(),title, type, category, cost));
+                if (template != null && template.getId() != null) {
+                    String id = template.getId();
+                    Template sendTemplate = new Template(id, title, type, category, cost);
+                    templateFirebaseService.updateTemplate(sendTemplate);
+                } else {
+                    String id = templateRef.push().getKey();
+                    Template sendTemplate = new Template(id, title, type, category, cost);
+                    templateFirebaseService.insertTemplate(template);
                 }
-                else
-                    templateDbHelper.insertTemplate(new Template(title, type, category, cost));
-
                 finish();
             }
         });
@@ -131,8 +144,7 @@ public class TemplateDetails extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.delete) {
-            TemplateDbHelper cashflowDbHelper = new TemplateDbHelper(getApplicationContext());
-            cashflowDbHelper.deleteTemplate(template);
+            templateFirebaseService.deleteTemplate(template);
             finish();
             return true;
         } else if (id == android.R.id.home) {

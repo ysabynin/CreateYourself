@@ -24,7 +24,7 @@ public class CashflowFragment extends Fragment {
 
     public static TabLayout tabLayout;
     public static ViewPager viewPager;
-    public static int int_items = 3;
+    public static int int_items = 2;
 
     @Nullable
     @Override
@@ -82,8 +82,8 @@ public class CashflowFragment extends Fragment {
                     return new EarningsFragment();
                 case 1:
                     return new СostsFragment();
-                case 2:
-                    return new BalanceFragment();
+/*                case 2:
+                    return new BalanceFragment();*/
             }
             return null;
         }
@@ -107,8 +107,8 @@ public class CashflowFragment extends Fragment {
                     return "Доходы";
                 case 1:
                     return "Расходы";
-                case 2:
-                    return "Остаток";
+/*                case 2:
+                    return "Остаток";*/
             }
             return null;
         }

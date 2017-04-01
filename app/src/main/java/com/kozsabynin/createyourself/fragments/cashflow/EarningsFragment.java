@@ -20,6 +20,7 @@ import com.kozsabynin.createyourself.R;
 import com.kozsabynin.createyourself.activity.CashDetailsActivity;
 import com.kozsabynin.createyourself.adapter.CashflowListViewAdapter;
 import com.kozsabynin.createyourself.db.CashflowDbHelper;
+import com.kozsabynin.createyourself.db.CashflowFirebaseService;
 import com.kozsabynin.createyourself.domain.Cashflow;
 
 import java.util.HashSet;
@@ -120,18 +121,15 @@ public class EarningsFragment extends Fragment {
         });
     }
 
-/*    @Override
+    @Override
     public void onResume() {
 
-        CashflowDbHelper cashflowDbHelper = new CashflowDbHelper(getActivity());
-        List<Cashflow> baseItems = cashflowDbHelper.getCashflow(CashType.INCOME);
+/*        CashflowDbHelper cashflowDbHelper = new CashflowDbHelper(getActivity());
+        List<Cashflow> baseItems = cashflowDbHelper.getCashflow(CashType.INCOME);*/
 
-        adapter = new CashflowListViewAdapter(getContext(), android.R.layout.simple_list_item_1, baseItems);
-        listView.setAdapter(adapter);
-
+        initAdapter();
         adapter.notifyDataSetChanged();
-
         super.onResume();
-    }*/
+    }
 }
 

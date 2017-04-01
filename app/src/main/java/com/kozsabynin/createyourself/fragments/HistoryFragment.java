@@ -13,6 +13,11 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.kozsabynin.createyourself.R;
 import com.kozsabynin.createyourself.activity.CashDetailsActivity;
 import com.kozsabynin.createyourself.adapter.CashflowListViewAdapter;
@@ -35,6 +40,12 @@ public class HistoryFragment extends Fragment {
     private CashflowListViewAdapter adapter = null;
     private ListView listView;
     Set<Cashflow> baseItems = new HashSet<>();
+    DatabaseReference cashflowRef = FirebaseDatabase.getInstance().getReference("cashflow");
+
+    private void initAdapter() {
+        adapter = new CashflowListViewAdapter(getContext(), android.R.layout.simple_list_item_1, baseItems);
+        listView.setAdapter(adapter);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -51,8 +62,46 @@ public class HistoryFragment extends Fragment {
         CashflowDbHelper cashflowDbHelper = new CashflowDbHelper(getActivity());
 //        baseItems = cashflowDbHelper.getAllCashflow();
 
-        CashflowListViewAdapter adapter = new CashflowListViewAdapter(getContext(), android.R.layout.simple_list_item_1, baseItems);
-        listView.setAdapter(adapter);
+        initAdapter();
+
+        cashflowRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Cashflow cashflow = dataSnapshot.getValue(Cashflow.class);
+                baseItems.add(cashflow);
+                initAdapter();
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                Cashflow cashflow = dataSnapshot.getValue(Cashflow.class);
+                if (cashflow.getType().equals("E")) {
+                    baseItems.remove(cashflow);
+                    baseItems.add(cashflow);
+                    initAdapter();
+                    adapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                Cashflow cashflow = dataSnapshot.getValue(Cashflow.class);
+                baseItems.remove(cashflow);
+                initAdapter();
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

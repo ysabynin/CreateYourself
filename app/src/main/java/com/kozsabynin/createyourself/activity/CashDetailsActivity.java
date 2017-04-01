@@ -22,6 +22,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.kozsabynin.createyourself.R;
 import com.kozsabynin.createyourself.db.CashflowDbHelper;
+import com.kozsabynin.createyourself.db.CashflowFirebaseService;
+import com.kozsabynin.createyourself.db.TemplateFirebaseService;
 import com.kozsabynin.createyourself.domain.CashType;
 import com.kozsabynin.createyourself.domain.Cashflow;
 import com.kozsabynin.createyourself.domain.Category;
@@ -55,6 +57,9 @@ public class CashDetailsActivity extends AppCompatActivity {
 
     DatabaseReference cashflowRef = FirebaseDatabase.getInstance().getReference("cashflow");
     DatabaseReference templateRef = FirebaseDatabase.getInstance().getReference("template");
+
+    CashflowFirebaseService cashflowFirebaseService = new CashflowFirebaseService();
+    TemplateFirebaseService templateFirebaseService = new TemplateFirebaseService();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,33 +134,18 @@ public class CashDetailsActivity extends AppCompatActivity {
                     category = cashflow.getCategory();
 
                 if (isTemplate) {
-    /*                TemplateDbHelper templateDbHelper = new TemplateDbHelper(context);
-                    templateDbHelper.insertTemplate(new Template(null, title, type, category, cost));*/
-
-                    String id = templateRef.push().getKey();
-                    Template sendTemplate = new Template(id, title, type, category, cost);
-                    Map<String, Object> child = new HashMap<>();
-                    child.put("/" + id, sendTemplate.toMap());
-                    templateRef.updateChildren(child);
+                    Template sendTemplate = new Template(null, title, type, category, cost);
+                    templateFirebaseService.insertTemplate(sendTemplate);
                 }
 
                 if (cashflow.getId() != null){
-//                    cashflowDbHelper.updateCashflow(new Cashflow(cashflow.getId(), title, type,cost, curDate,category));
-
                     String id = cashflow.getId();
-                    Cashflow sendCashflow = new Cashflow(cashflow.getId(), title, type,cost, curDate,category);
-                    Map<String, Object> cashflowValue = new HashMap<>();/*category.toMap();*/
-                    cashflowValue.put("/" + id, sendCashflow.toMap());
-                    cashflowRef.updateChildren(cashflowValue);
+                    Cashflow sendCashflow = new Cashflow(id, title, type,cost, curDate,category);
+                    cashflowFirebaseService.updateCashflow(sendCashflow);
                 }
                 else {
-//                    cashflowDbHelper.insertCashflow(new Cashflow(title, type, cost, curDate, category));
-
-                    String id = cashflowRef.push().getKey();
-                    Cashflow sendCashflow = new Cashflow(id, title, type, cost, curDate, category);
-                    Map<String, Object> cashflowValue = new HashMap<>();
-                    cashflowValue.put("/" + id, sendCashflow.toMap());
-                    cashflowRef.updateChildren(cashflowValue);
+                    Cashflow sendCashflow = new Cashflow(null, title, type, cost, curDate, category);
+                    cashflowFirebaseService.insertCashflow(sendCashflow);
                 }
                 finish();
             }
@@ -264,9 +254,7 @@ public class CashDetailsActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.delete) {
-/*            CashflowDbHelper cashflowDbHelper = new CashflowDbHelper(getApplicationContext());
-            cashflowDbHelper.deleteCashflowById(cashflow);*/
-            cashflowRef.child(cashflow.getId()).removeValue();
+            cashflowFirebaseService.deleteCashflow(cashflow);
             finish();
             return true;
         } else if (id == R.id.templates) {

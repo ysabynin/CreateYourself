@@ -17,6 +17,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.kozsabynin.createyourself.R;
 import com.kozsabynin.createyourself.db.CategoryDbHelper;
+import com.kozsabynin.createyourself.db.CategoryFirebaseService;
+import com.kozsabynin.createyourself.db.TemplateFirebaseService;
 import com.kozsabynin.createyourself.domain.CashType;
 import com.kozsabynin.createyourself.domain.Category;
 
@@ -32,6 +34,7 @@ public class CategoryDetailsActivity extends AppCompatActivity {
     private Category category;
 
     DatabaseReference categoryRef = FirebaseDatabase.getInstance().getReference("category");
+    CategoryFirebaseService categoryFirebaseService = new CategoryFirebaseService();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,16 +76,13 @@ public class CategoryDetailsActivity extends AppCompatActivity {
 
                     String id = category.getId();
                     Category category = new Category(id, title, type);
-                    Map<String, Object> categoryValue = new HashMap<>();/*category.toMap();*/
-                    categoryValue.put("/" + id, category.toMap());
-                    categoryRef.updateChildren(categoryValue);
+                    categoryFirebaseService.updateCategory(category);
                 }
                 else {
                     String id = categoryRef.push().getKey();
                     Category category = new Category(id, title, type);
-                    Map<String, Object> categoryValue = new HashMap<>();/*category.toMap();*/
-                    categoryValue.put("/" + id, category.toMap());
-                    categoryRef.updateChildren(categoryValue);
+                    categoryFirebaseService.insertCategory(category);
+
 
 //                    categoryDbHelper.insertCategory(new Category(title, type));
                 }
@@ -116,9 +116,7 @@ public class CategoryDetailsActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.delete && category.getId() != null) {
-            CategoryDbHelper categoryDbHelper = new CategoryDbHelper(getApplicationContext());
-//            categoryDbHelper.deleteCategory(category);
-            categoryRef.child(category.getId()).removeValue();
+            categoryFirebaseService.deleteCategory(category);
             finish();
             return true;
         } else if (id == android.R.id.home) {

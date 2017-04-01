@@ -88,9 +88,7 @@ public class СostsFragment extends Fragment {
             public void onCancelled(DatabaseError databaseError) {
 
             }
-                                          }
-
-        );
+        });
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
 
@@ -106,16 +104,16 @@ public class СostsFragment extends Fragment {
         return listView;
     }
 
-/*    @Override
+    @Override
     public void onResume() {
+/*
         CashflowDbHelper cashflowDbHelper = new CashflowDbHelper(getActivity());
         List<Cashflow> baseItems = cashflowDbHelper.getCashflow(CashType.EXPENSE);
+*/
 
-        CashflowListViewAdapter adapter = new CashflowListViewAdapter(getContext(), android.R.layout.simple_list_item_1, baseItems);
-        listView.setAdapter(adapter);
-
+        initAdapter();
         adapter.notifyDataSetChanged();
 
         super.onResume();
-    }*/
+    }
 }
