@@ -1,5 +1,6 @@
 package com.kozsabynin.createyourself.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -12,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.kozsabynin.createyourself.R;
 import com.kozsabynin.createyourself.fragments.CashflowFragment;
 import com.kozsabynin.createyourself.fragments.HistoryFragment;
@@ -20,10 +22,15 @@ import com.kozsabynin.createyourself.fragments.TemplateFragment;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private FirebaseAuth firebaseAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        firebaseAuth = FirebaseAuth.getInstance();
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -99,8 +106,13 @@ public class MainActivity extends AppCompatActivity
             fragment = new TemplateFragment();
         } else if (id == R.id.history) {
             title="История";
-
             fragment = new HistoryFragment();
+        } else if (id == R.id.logout) {
+            firebaseAuth.signOut();
+            //closing activity
+            finish();
+            //starting login activity
+            startActivity(new Intent(this, LoginActivity.class));
         }
         if(fragment != null){
             fm = getSupportFragmentManager();

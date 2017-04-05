@@ -19,6 +19,11 @@
             android:id="@+id/history"
             android:icon="@drawable/ic_menu_history"
             android:title="@string/history" />
+
+        <item
+            android:id="@+id/logout"
+            android:icon="@drawable/ic_menu_share"
+            android:title="@string/logout" />
     </group>
 
 </menu>

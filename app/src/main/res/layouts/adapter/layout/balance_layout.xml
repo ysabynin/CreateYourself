@@ -15,14 +15,14 @@ android:layout_height="fill_parent" >
         android:layout_height="fill_parent"
         android:orientation="vertical" >
 
-        <TextView
+ <!--       <TextView
             android:id="@+id/TextView01"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="20dip"
             android:text="@string/assets"
             android:layout_gravity="center_horizontal">
-        </TextView>
+        </TextView>-->
 
         <com.github.mikephil.charting.charts.PieChart
             android:id="@+id/category_assets_pie_chart"
@@ -44,14 +44,14 @@ android:layout_height="fill_parent" >
             android:layout_width="match_parent"
             android:layout_height="300dp" />
 
-        <TextView
+<!--        <TextView
             android:id="@+id/TextView01"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="20dip"
             android:text="@string/balance_report"
             android:layout_gravity="center_horizontal">
-        </TextView>
+        </TextView>-->
 
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/balance_line_chart"

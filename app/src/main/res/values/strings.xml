@@ -8,6 +8,7 @@
     <string name="templates">Шаблоны</string>
     <string name="history">История</string>
     <string name="categories">Категории</string>
+    <string name="logout">Выход</string>
 
     <string name="action_settings">Settings</string>
     <string name="title_activity_login">Sign in</string>

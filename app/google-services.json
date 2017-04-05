@@ -15,15 +15,7 @@
       },
       "oauth_client": [
         {
-          "client_id": "1039254710257-1mf0tcbqprql1fg9vcu2b0qbljme8kvc.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.kozsabynin.createyourself",
-            "certificate_hash": "8a71368ae1a0698048cf2652dc220f6c743ba2c1"
-          }
-        },
-        {
-          "client_id": "1039254710257-o9539hd4a83seviq0uccan3ebt70o9bo.apps.googleusercontent.com",
+          "client_id": "1039254710257-nfp8etm1i64rpri7j5v553m8804l008s.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -37,13 +29,8 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 2,
-          "other_platform_oauth_client": [
-            {
-              "client_id": "1039254710257-o9539hd4a83seviq0uccan3ebt70o9bo.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "status": 1,
+          "other_platform_oauth_client": []
         },
         "ads_service": {
           "status": 2
