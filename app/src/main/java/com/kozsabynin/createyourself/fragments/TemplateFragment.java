@@ -19,9 +19,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.kozsabynin.createyourself.R;
 import com.kozsabynin.createyourself.activity.TemplateDetails;
 import com.kozsabynin.createyourself.adapter.TemplateListViewAdapter;
+import com.kozsabynin.createyourself.db.TemplateFirebaseService;
 import com.kozsabynin.createyourself.domain.Template;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -30,34 +33,24 @@ import java.util.Set;
 public class TemplateFragment extends Fragment {
     private TemplateListViewAdapter adapter = null;
     private ListView listView;
-    private Set<Template> baseItems = new HashSet<>();
-    DatabaseReference templateRef = FirebaseDatabase.getInstance().getReference("template");
+    private List<Template> baseItems = new ArrayList<>();
 
     public TemplateFragment() {
         // Required empty public constructor
     }
 
-
-    private void initAdapter() {
-        adapter = new TemplateListViewAdapter(getContext(), android.R.layout.simple_list_item_1, baseItems);
-        listView.setAdapter(adapter);
-    }
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this layouts.fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.template_fragment, container, false);
 
         listView = (ListView) view.findViewById(R.id.template_list);
 
-//        TemplateDbHelper templateDbHelper = new TemplateDbHelper(getActivity());
         FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
         fab.show();
         showDialog(fab);
 
-        initAdapter();
-
+        adapter = new TemplateListViewAdapter(getContext(), android.R.layout.simple_list_item_1, baseItems);
+        listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -68,31 +61,25 @@ public class TemplateFragment extends Fragment {
             }
         });
 
-        templateRef.addChildEventListener(
+        TemplateFirebaseService.getTemplateRef().addChildEventListener(
                 new ChildEventListener() {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                         Template template = dataSnapshot.getValue(Template.class);
-                        baseItems.add(template);
-                        initAdapter();
-                        adapter.notifyDataSetChanged();
+                        adapter.add(template);
                     }
 
                     @Override
                     public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                         Template template = dataSnapshot.getValue(Template.class);
-                        baseItems.remove(template);
-                        baseItems.add(template);
-                        initAdapter();
-                        adapter.notifyDataSetChanged();
+                        adapter.remove(template);
+                        adapter.add(template);
                     }
 
                     @Override
                     public void onChildRemoved(DataSnapshot dataSnapshot) {
                         Template template = dataSnapshot.getValue(Template.class);
-                        baseItems.remove(template);
-                        initAdapter();
-                        adapter.notifyDataSetChanged();
+                        adapter.remove(template);
                     }
 
 
@@ -124,19 +111,4 @@ public class TemplateFragment extends Fragment {
             }
         });
     }
-
-/*    @Override
-    public void onResume() {
-
-        TemplateDbHelper cashflowDbHelper = new TemplateDbHelper(getActivity());
-        List<Template> baseItems = cashflowDbHelper.getTemplates();
-
-        adapter = new TemplateListViewAdapter(getContext(), android.R.layout.simple_list_item_1, baseItems);
-        listView.setAdapter(adapter);
-
-        adapter.notifyDataSetChanged();
-
-        super.onResume();
-    }*/
-
 }

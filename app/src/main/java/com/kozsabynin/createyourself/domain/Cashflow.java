@@ -94,7 +94,7 @@ public class Cashflow implements Serializable {
     }
 
     public Category getCategory() {
-        return category;
+        return category == null ? new Category("Unknown",type) : category;
     }
 
     public void setCategory(Category category) {

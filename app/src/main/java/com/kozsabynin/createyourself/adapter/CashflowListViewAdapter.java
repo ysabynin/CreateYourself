@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.kozsabynin.createyourself.R;
 import com.kozsabynin.createyourself.domain.CashType;
 import com.kozsabynin.createyourself.domain.Cashflow;
+import com.kozsabynin.createyourself.domain.Category;
 import com.kozsabynin.createyourself.util.DateUtils;
 
 import java.util.ArrayList;
@@ -27,14 +28,12 @@ public class CashflowListViewAdapter extends ArrayAdapter<Cashflow> {
     Context context;
     LayoutInflater inflater;
     List<Cashflow> baseItemsList;
-    private SparseBooleanArray mSelectedItemsIds;
 
     public CashflowListViewAdapter(Context context, int resourceId,
-                                   Set<Cashflow> baseItemsList) {
-        super(context, resourceId, new ArrayList<>(baseItemsList));
-        mSelectedItemsIds = new SparseBooleanArray();
+                                   List<Cashflow> baseItemsList) {
+        super(context, resourceId, baseItemsList);
         this.context = context;
-        this.baseItemsList = new ArrayList<>(baseItemsList);
+        this.baseItemsList = baseItemsList;
         inflater = LayoutInflater.from(context);
     }
 
@@ -76,8 +75,11 @@ public class CashflowListViewAdapter extends ArrayAdapter<Cashflow> {
         bgShape.setStroke(40, Color.BLUE);
         bgShape.setColor(Color.BLUE);
         //TODO: add check for npe
-        String iconTitle = p.getCategory().getTitle().substring(0, 1);
-        holder.categoryIcon.setText(iconTitle);
+        Category category = p.getCategory();
+        if(category != null){
+            String iconTitle = category.getTitle().substring(0, 1);
+            holder.categoryIcon.setText(iconTitle);
+        }
 
         holder.title.setText(p.getTitle());
 
@@ -93,40 +95,5 @@ public class CashflowListViewAdapter extends ArrayAdapter<Cashflow> {
         holder.date.setText(dateText);
 
         return v;
-    }
-
-    @Override
-    public void remove(Cashflow object) {
-        baseItemsList.remove(object);
-        notifyDataSetChanged();
-    }
-
-    public List<Cashflow> getWorldPopulation() {
-        return baseItemsList;
-    }
-
-    public void toggleSelection(int position) {
-        selectView(position, !mSelectedItemsIds.get(position));
-    }
-
-    public void removeSelection() {
-        mSelectedItemsIds = new SparseBooleanArray();
-        notifyDataSetChanged();
-    }
-
-    public void selectView(int position, boolean value) {
-        if (value)
-            mSelectedItemsIds.put(position, value);
-        else
-            mSelectedItemsIds.delete(position);
-        notifyDataSetChanged();
-    }
-
-    public int getSelectedCount() {
-        return mSelectedItemsIds.size();
-    }
-
-    public SparseBooleanArray getSelectedIds() {
-        return mSelectedItemsIds;
     }
 }

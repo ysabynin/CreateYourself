@@ -14,9 +14,7 @@ import com.kozsabynin.createyourself.R;
 import com.kozsabynin.createyourself.domain.CashType;
 import com.kozsabynin.createyourself.domain.Template;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by Evgeni Developer on 03.04.2016.
@@ -28,11 +26,11 @@ public class TemplateListViewAdapter extends ArrayAdapter<Template> {
     private SparseBooleanArray mSelectedItemsIds;
 
     public TemplateListViewAdapter(Context context, int resourceId,
-                                   Set<Template> baseItemsList) {
-        super(context, resourceId, new ArrayList<>(baseItemsList));
+                                   List<Template> baseItemsList) {
+        super(context, resourceId, baseItemsList);
         mSelectedItemsIds = new SparseBooleanArray();
         this.context = context;
-        this.baseItemsList = new ArrayList<>(baseItemsList);
+        this.baseItemsList = baseItemsList;
         inflater = LayoutInflater.from(context);
     }
 
@@ -67,19 +65,19 @@ public class TemplateListViewAdapter extends ArrayAdapter<Template> {
 
         Template template = baseItemsList.get(position);
 
-        GradientDrawable bgShape = (GradientDrawable)holder.categoryIcon.getBackground();
+        GradientDrawable bgShape = (GradientDrawable) holder.categoryIcon.getBackground();
         bgShape.setStroke(40, Color.BLUE);
         bgShape.setColor(Color.BLUE);
-        String iconTitle = template.getTitle().substring(0,1);
+        String iconTitle = template.getTitle().substring(0, 1);
         holder.categoryIcon.setText(iconTitle);
 
         holder.title.setText(template.getTitle());
 
-        int color = template.getType()== CashType.INCOME.getText()?Color.GREEN:Color.RED;
+        int color = template.getType() == CashType.INCOME.getText() ? Color.GREEN : Color.RED;
         holder.price.setTextColor(color);
-        String sign = CashType.INCOME.getText() == template.getType() ?"+":"-";
+        String sign = CashType.INCOME.getText() == template.getType() ? "+" : "-";
 
-        holder.price.setText(sign + " "+template.getCost()+" руб.");
+        holder.price.setText(sign + " " + template.getCost() + " руб.");
 
         return v;
     }
@@ -88,34 +86,5 @@ public class TemplateListViewAdapter extends ArrayAdapter<Template> {
     public void remove(Template object) {
         baseItemsList.remove(object);
         notifyDataSetChanged();
-    }
-
-    public List<Template> getWorldPopulation() {
-        return baseItemsList;
-    }
-
-    public void toggleSelection(int position) {
-        selectView(position, !mSelectedItemsIds.get(position));
-    }
-
-    public void removeSelection() {
-        mSelectedItemsIds = new SparseBooleanArray();
-        notifyDataSetChanged();
-    }
-
-    public void selectView(int position, boolean value) {
-        if (value)
-            mSelectedItemsIds.put(position, value);
-        else
-            mSelectedItemsIds.delete(position);
-        notifyDataSetChanged();
-    }
-
-    public int getSelectedCount() {
-        return mSelectedItemsIds.size();
-    }
-
-    public SparseBooleanArray getSelectedIds() {
-        return mSelectedItemsIds;
     }
 }

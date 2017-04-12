@@ -17,79 +17,59 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.kozsabynin.createyourself.R;
 import com.kozsabynin.createyourself.activity.CashDetailsActivity;
 import com.kozsabynin.createyourself.adapter.CashflowListViewAdapter;
-import com.kozsabynin.createyourself.db.CashflowDbHelper;
+import com.kozsabynin.createyourself.db.CashflowFirebaseService;
 import com.kozsabynin.createyourself.domain.Cashflow;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class HistoryFragment extends Fragment {
-
+    private CashflowListViewAdapter adapter = null;
+    private ListView listView;
+    List<Cashflow> baseItems = new ArrayList<>();
+    DatabaseReference cashflowRef;
+    ChildEventListener mChildEventListener = null;
 
     public HistoryFragment() {
         // Required empty public constructor
     }
 
-    private CashflowListViewAdapter adapter = null;
-    private ListView listView;
-    Set<Cashflow> baseItems = new HashSet<>();
-    DatabaseReference cashflowRef = FirebaseDatabase.getInstance().getReference("cashflow");
-
-    private void initAdapter() {
-        adapter = new CashflowListViewAdapter(getContext(), android.R.layout.simple_list_item_1, baseItems);
-        listView.setAdapter(adapter);
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this layouts.fragment
         View view = inflater.inflate(R.layout.history_fragment, container, false);
-
-
         listView = (ListView) view.findViewById(R.id.history_list);
-
         FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
         fab.hide();
 
-        CashflowDbHelper cashflowDbHelper = new CashflowDbHelper(getActivity());
-//        baseItems = cashflowDbHelper.getAllCashflow();
-
-        initAdapter();
+        adapter = new CashflowListViewAdapter(getContext(), android.R.layout.simple_list_item_1, baseItems);
+        listView.setAdapter(adapter);
+        cashflowRef = CashflowFirebaseService.getCashflowRef();
 
         cashflowRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Cashflow cashflow = dataSnapshot.getValue(Cashflow.class);
-                baseItems.add(cashflow);
-                initAdapter();
-                adapter.notifyDataSetChanged();
+                adapter.add(cashflow);
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 Cashflow cashflow = dataSnapshot.getValue(Cashflow.class);
-                if (cashflow.getType().equals("E")) {
-                    baseItems.remove(cashflow);
-                    baseItems.add(cashflow);
-                    initAdapter();
-                    adapter.notifyDataSetChanged();
-                }
+                adapter.remove(cashflow);
+                adapter.add(cashflow);
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 Cashflow cashflow = dataSnapshot.getValue(Cashflow.class);
-                baseItems.remove(cashflow);
-                initAdapter();
-                adapter.notifyDataSetChanged();
+                adapter.remove(cashflow);
             }
 
             @Override
@@ -118,36 +98,19 @@ public class HistoryFragment extends Fragment {
         return view;
     }
 
-/*    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.filter) {
-
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }*/
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.history_activity, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
-/*    @Override
-    public void onResume() {
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if(mChildEventListener != null){
+            cashflowRef.removeEventListener(mChildEventListener);
+        }
 
-        CashflowDbHelper cashflowDbHelper = new CashflowDbHelper(getActivity());
-        List<Cashflow> baseItems = cashflowDbHelper.getAllCashflow();
-
-        adapter = new CashflowListViewAdapter(getContext(), android.R.layout.simple_list_item_1, baseItems);
-        listView.setAdapter(adapter);
-
-        adapter.notifyDataSetChanged();
-
-        super.onResume();
-    }*/
-
+        adapter.clear();
+    }
 }

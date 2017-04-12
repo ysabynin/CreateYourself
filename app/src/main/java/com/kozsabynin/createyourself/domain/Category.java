@@ -73,7 +73,8 @@ public class Category implements Serializable {
         HashMap<String, Object> result = new HashMap<>();
         result.put("id", id);
         result.put("title", title);
-        result.put("type", type.getText());
+        if(type != null)
+            result.put("type", type.getText());
 
         return result;
     }

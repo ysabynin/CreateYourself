@@ -13,25 +13,33 @@ import java.util.Map;
  * Created by Evgeni Developer on 29.03.2017.
  */
 public class CategoryFirebaseService {
-    DatabaseReference firebaseDB = FirebaseDatabase.getInstance().getReference("users");
-    FirebaseUser firebaseAuth = FirebaseAuth.getInstance().getCurrentUser();
+    private static FirebaseUser firebaseAuth = FirebaseAuth.getInstance().getCurrentUser();
+    private static DatabaseReference categoryRef = FirebaseDatabase.getInstance().getReference("users")
+            .child(firebaseAuth.getUid()).child("category");
 
+    public static DatabaseReference getCategoryRef(){
+        return categoryRef;
+    }
+    
     public void insertCategory(Category category){
-        String id = firebaseDB.push().getKey();
+        DatabaseReference categoryRef = getCategoryRef();
+        String id = categoryRef.push().getKey();
         category.setId(id);
         Map<String, Object> categoryValue = new HashMap<>();
         categoryValue.put("/" + id, category.toMap());
-        firebaseDB.child(firebaseAuth.getUid()).child("category").updateChildren(categoryValue);
+        categoryRef.updateChildren(categoryValue);
     }
 
     public void updateCategory(Category category){
+        DatabaseReference categoryRef = getCategoryRef();
         String id = category.getId();
         Map<String, Object> categoryValue = new HashMap<>();
         categoryValue.put("/" + id, category.toMap());
-        firebaseDB.updateChildren(categoryValue);
+        categoryRef.updateChildren(categoryValue);
     }
 
     public void deleteCategory(Category category){
-        firebaseDB.child(category.getId()).removeValue();
+        DatabaseReference categoryRef = getCategoryRef();
+        categoryRef.child(category.getId()).removeValue();
     }
 }

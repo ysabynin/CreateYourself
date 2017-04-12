@@ -15,74 +15,59 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.kozsabynin.createyourself.R;
 import com.kozsabynin.createyourself.activity.CashDetailsActivity;
 import com.kozsabynin.createyourself.adapter.CashflowListViewAdapter;
-import com.kozsabynin.createyourself.db.CashflowDbHelper;
 import com.kozsabynin.createyourself.db.CashflowFirebaseService;
 import com.kozsabynin.createyourself.domain.Cashflow;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EarningsFragment extends Fragment {
     private CashflowListViewAdapter adapter = null;
     private ListView listView = null;
-    Set<Cashflow> baseItems = new HashSet<>();
+    ChildEventListener mChildEventListener = null;
+    DatabaseReference cashflowRef = null;
 
-    DatabaseReference cashflowRef = FirebaseDatabase.getInstance().getReference("cashflow");
-
-    private void initAdapter(){
-        adapter = new CashflowListViewAdapter(getContext(), android.R.layout.simple_list_item_1, baseItems);
-        listView.setAdapter(adapter);
-    }
+    List<Cashflow> baseItems = new ArrayList<>();
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.cashflow_list, null);
-
+        View rootView = inflater.inflate(R.layout.cashflow_list, container, false);
         listView = (ListView) rootView.findViewById(R.id.cashflow_list);
-
         FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
         fab.show();
         showDialog(fab);
 
-        CashflowDbHelper cashflowDbHelper = new CashflowDbHelper(getActivity());
-//        baseItems = cashflowDbHelper.getCashflow(CashType.INCOME);
+        adapter = new CashflowListViewAdapter(getContext(), android.R.layout.simple_list_item_1, baseItems);
+        listView.setAdapter(adapter);
+        cashflowRef = CashflowFirebaseService.getCashflowRef();
 
-        initAdapter();
-
-        cashflowRef.addChildEventListener(new ChildEventListener() {
+        mChildEventListener = cashflowRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Cashflow cashflow = dataSnapshot.getValue(Cashflow.class);
-                if(cashflow.getType().equals("I")) {
-                    baseItems.add(cashflow);
-                    initAdapter();
-                    adapter.notifyDataSetChanged();
+                if (cashflow.getType().equals("I")) {
+                    adapter.add(cashflow);
                 }
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 Cashflow cashflow = dataSnapshot.getValue(Cashflow.class);
-                if(cashflow.getType().equals("I")) {
-                    baseItems.remove(cashflow);
-                    baseItems.add(cashflow);
-                    initAdapter();
-                    adapter.notifyDataSetChanged();
+                if (cashflow.getType().equals("I")) {
+                    adapter.remove(cashflow);
+                    adapter.add(cashflow);
                 }
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 Cashflow cashflow = dataSnapshot.getValue(Cashflow.class);
-                if(cashflow.getType().equals("I")){
-                    baseItems.remove(cashflow);
-                    initAdapter();
-                    adapter.notifyDataSetChanged();
+                if (cashflow.getType().equals("I")) {
+                    adapter.remove(cashflow);
                 }
             }
 
@@ -122,14 +107,11 @@ public class EarningsFragment extends Fragment {
     }
 
     @Override
-    public void onResume() {
-
-/*        CashflowDbHelper cashflowDbHelper = new CashflowDbHelper(getActivity());
-        List<Cashflow> baseItems = cashflowDbHelper.getCashflow(CashType.INCOME);*/
-
-        initAdapter();
-        adapter.notifyDataSetChanged();
-        super.onResume();
+    public void onDestroyView() {
+        super.onDestroyView();
+        if(mChildEventListener != null){
+            cashflowRef.removeEventListener(mChildEventListener);
+        }
     }
 }
 

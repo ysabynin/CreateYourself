@@ -26,14 +26,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CategoryDetailsActivity extends AppCompatActivity {
-
     private EditText titleEditor;
     private EditText colorEditor;
     private RadioButton incomeCheckBox;
 
     private Category category;
 
-    DatabaseReference categoryRef = FirebaseDatabase.getInstance().getReference("category");
+    DatabaseReference categoryRef = null;
     CategoryFirebaseService categoryFirebaseService = new CategoryFirebaseService();
 
     @Override
@@ -43,6 +42,7 @@ public class CategoryDetailsActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        categoryRef = categoryFirebaseService.getCategoryRef();
         Intent intent = getIntent();
         category = (Category) intent.getSerializableExtra("category");
 
@@ -62,8 +62,6 @@ public class CategoryDetailsActivity extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                CategoryDbHelper categoryDbHelper = new CategoryDbHelper(getApplicationContext());
-
                 String title = titleEditor.getText().toString();
                 if (title.matches("")) {
                     Toast.makeText(getApplicationContext(), "Одно из полей пустое", Toast.LENGTH_LONG).show();
@@ -72,8 +70,6 @@ public class CategoryDetailsActivity extends AppCompatActivity {
                 CashType type = (incomeCheckBox.isChecked()) ? CashType.INCOME : CashType.EXPENSE;
 
                 if (category.getId() != null) {
-//                    categoryDbHelper.updateCategory(new Category(category.getId(), title, type));
-
                     String id = category.getId();
                     Category category = new Category(id, title, type);
                     categoryFirebaseService.updateCategory(category);
@@ -82,9 +78,6 @@ public class CategoryDetailsActivity extends AppCompatActivity {
                     String id = categoryRef.push().getKey();
                     Category category = new Category(id, title, type);
                     categoryFirebaseService.insertCategory(category);
-
-
-//                    categoryDbHelper.insertCategory(new Category(title, type));
                 }
 
                 finish();

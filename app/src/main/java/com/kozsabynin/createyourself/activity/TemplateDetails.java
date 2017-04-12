@@ -34,8 +34,6 @@ public class TemplateDetails extends AppCompatActivity {
 
     private Category category;
     private Template template;
-
-    DatabaseReference templateRef = FirebaseDatabase.getInstance().getReference("template");
     TemplateFirebaseService templateFirebaseService = new TemplateFirebaseService();
 
     @Override
@@ -90,8 +88,6 @@ public class TemplateDetails extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TemplateDbHelper templateDbHelper = new TemplateDbHelper(getApplicationContext());
-
                 String title = titleEditor.getText().toString();
                 CashType type = (incomeCheckBox.isChecked()) ? CashType.INCOME : CashType.EXPENSE;
                 String costLine = costEditor.getText().toString().split(" ")[0].replace(",", ".");
@@ -104,7 +100,7 @@ public class TemplateDetails extends AppCompatActivity {
                     return;
                 }
 
-                Double cost = null;
+                Double cost;
 
                 try {
                     cost = Double.valueOf(costLine);
@@ -120,9 +116,8 @@ public class TemplateDetails extends AppCompatActivity {
                     Template sendTemplate = new Template(id, title, type, category, cost);
                     templateFirebaseService.updateTemplate(sendTemplate);
                 } else {
-                    String id = templateRef.push().getKey();
-                    Template sendTemplate = new Template(id, title, type, category, cost);
-                    templateFirebaseService.insertTemplate(template);
+                    Template sendTemplate = new Template(null, title, type, category, cost);
+                    templateFirebaseService.insertTemplate(sendTemplate);
                 }
                 finish();
             }

@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -17,6 +18,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.kozsabynin.createyourself.R;
 import com.kozsabynin.createyourself.adapter.CategoryListViewAdapter;
+import com.kozsabynin.createyourself.db.CategoryFirebaseService;
 import com.kozsabynin.createyourself.domain.Category;
 
 import java.util.HashSet;
@@ -30,7 +32,8 @@ public class CategoryActivityFragment extends Fragment {
     CategoryListViewAdapter adapter;
     Set<Category> baseItems = new HashSet<>();
 
-    DatabaseReference categoryRef = FirebaseDatabase.getInstance().getReference("category");
+    DatabaseReference categoryRef = null;
+    ChildEventListener mChildEventListener = null;
 
     public CategoryActivityFragment() {
     }
@@ -52,30 +55,26 @@ public class CategoryActivityFragment extends Fragment {
 
         initAdapter();
 
-        categoryRef.addChildEventListener(new ChildEventListener() {
+        categoryRef = CategoryFirebaseService.getCategoryRef();
+
+        mChildEventListener = categoryRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Category category = dataSnapshot.getValue(Category.class);
-                baseItems.add(category);
-                initAdapter();
-                adapter.notifyDataSetChanged();
+                adapter.add(category);
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 Category category = dataSnapshot.getValue(Category.class);
-                baseItems.remove(category);
-                baseItems.add(category);
-                initAdapter();
-                adapter.notifyDataSetChanged();
+                adapter.remove(category);
+                adapter.add(category);
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 Category category = dataSnapshot.getValue(Category.class);
-                baseItems.remove(category);
-                initAdapter();
-                adapter.notifyDataSetChanged();
+                adapter.remove(category);
             }
 
             @Override
@@ -102,6 +101,13 @@ public class CategoryActivityFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if(mChildEventListener != null)
+            categoryRef.removeEventListener(mChildEventListener);
+    }
+
     private void showDialog(FloatingActionButton fab) {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,18 +118,4 @@ public class CategoryActivityFragment extends Fragment {
             }
         });
     }
-
-
-/*    @Override
-    public void onResume() {
-        CategoryDbHelper cashflowDbHelper = new CategoryDbHelper(getActivity());
-        List<Category> baseItems = cashflowDbHelper.getCategories();
-
-        CategoryListViewAdapter adapter = new CategoryListViewAdapter(getContext(), android.R.layout.simple_list_item_1, baseItems);
-        listView.setAdapter(adapter);
-
-        adapter.notifyDataSetChanged();
-
-        super.onResume();
-    }*/
 }

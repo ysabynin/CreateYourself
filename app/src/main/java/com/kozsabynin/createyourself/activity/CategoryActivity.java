@@ -17,6 +17,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.kozsabynin.createyourself.R;
 import com.kozsabynin.createyourself.adapter.CategoryListViewAdapter;
 import com.kozsabynin.createyourself.db.CategoryDbHelper;
+import com.kozsabynin.createyourself.db.CategoryFirebaseService;
 import com.kozsabynin.createyourself.domain.Category;
 
 import java.util.HashSet;
@@ -26,7 +27,9 @@ public class CategoryActivity extends AppCompatActivity {
     private ListView listView;
     CategoryListViewAdapter adapter;
     Set<Category> baseItems = new HashSet<>();
-    DatabaseReference categoryRef = FirebaseDatabase.getInstance().getReference("category");
+
+    DatabaseReference categoryRef = null;
+    ChildEventListener mChildEventListener = null;
 
     private void initAdapter(){
         adapter = new CategoryListViewAdapter(this, android.R.layout.simple_list_item_1, baseItems);
@@ -41,10 +44,6 @@ public class CategoryActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         listView = (ListView) findViewById(R.id.category_list);
-
-        CategoryDbHelper categoryDbHelper = new CategoryDbHelper(this);
-//        Set<CategoryDTO> baseItems = categoryDbHelper.getCategories();
-
         initAdapter();
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -59,7 +58,8 @@ public class CategoryActivity extends AppCompatActivity {
             }
         });
 
-        categoryRef.addChildEventListener(new ChildEventListener() {
+        categoryRef = CategoryFirebaseService.getCategoryRef();
+        mChildEventListener = categoryRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Category category = dataSnapshot.getValue(Category.class);
@@ -97,6 +97,13 @@ public class CategoryActivity extends AppCompatActivity {
         });
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(mChildEventListener != null)
+            categoryRef.removeEventListener(mChildEventListener);
     }
 
     @Override
