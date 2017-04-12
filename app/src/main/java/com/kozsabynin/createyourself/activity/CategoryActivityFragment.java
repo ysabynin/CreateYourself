@@ -10,19 +10,17 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.kozsabynin.createyourself.R;
 import com.kozsabynin.createyourself.adapter.CategoryListViewAdapter;
 import com.kozsabynin.createyourself.db.CategoryFirebaseService;
 import com.kozsabynin.createyourself.domain.Category;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A placeholder layouts.fragment containing a simple view.
@@ -30,17 +28,12 @@ import java.util.Set;
 public class CategoryActivityFragment extends Fragment {
     ListView listView;
     CategoryListViewAdapter adapter;
-    Set<Category> baseItems = new HashSet<>();
+    List<Category> baseItems = new ArrayList<>();
 
     DatabaseReference categoryRef = null;
     ChildEventListener mChildEventListener = null;
 
     public CategoryActivityFragment() {
-    }
-
-    private void initAdapter(){
-        adapter = new CategoryListViewAdapter(getContext(), android.R.layout.simple_list_item_1, baseItems);
-        listView.setAdapter(adapter);
     }
 
     @Override
@@ -53,7 +46,8 @@ public class CategoryActivityFragment extends Fragment {
         fab.show();
         showDialog(fab);
 
-        initAdapter();
+        adapter = new CategoryListViewAdapter(getContext(), android.R.layout.simple_list_item_1, baseItems);
+        listView.setAdapter(adapter);
 
         categoryRef = CategoryFirebaseService.getCategoryRef();
 
@@ -104,7 +98,7 @@ public class CategoryActivityFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if(mChildEventListener != null)
+        if (mChildEventListener != null)
             categoryRef.removeEventListener(mChildEventListener);
     }
 

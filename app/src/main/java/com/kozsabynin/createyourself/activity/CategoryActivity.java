@@ -13,28 +13,21 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.kozsabynin.createyourself.R;
 import com.kozsabynin.createyourself.adapter.CategoryListViewAdapter;
-import com.kozsabynin.createyourself.db.CategoryDbHelper;
 import com.kozsabynin.createyourself.db.CategoryFirebaseService;
 import com.kozsabynin.createyourself.domain.Category;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CategoryActivity extends AppCompatActivity {
     private ListView listView;
     CategoryListViewAdapter adapter;
-    Set<Category> baseItems = new HashSet<>();
+    List<Category> baseItems = new ArrayList<>();
 
     DatabaseReference categoryRef = null;
     ChildEventListener mChildEventListener = null;
-
-    private void initAdapter(){
-        adapter = new CategoryListViewAdapter(this, android.R.layout.simple_list_item_1, baseItems);
-        listView.setAdapter(adapter);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +37,8 @@ public class CategoryActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         listView = (ListView) findViewById(R.id.category_list);
-        initAdapter();
+        adapter = new CategoryListViewAdapter(this, android.R.layout.simple_list_item_1, baseItems);
+        listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -63,26 +57,20 @@ public class CategoryActivity extends AppCompatActivity {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Category category = dataSnapshot.getValue(Category.class);
-                baseItems.add(category);
-                initAdapter();
-                adapter.notifyDataSetChanged();
+                adapter.add(category);
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 Category category = dataSnapshot.getValue(Category.class);
-                baseItems.remove(category);
-                baseItems.add(category);
-                initAdapter();
-                adapter.notifyDataSetChanged();
+                adapter.remove(category);
+                adapter.add(category);
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 Category category = dataSnapshot.getValue(Category.class);
-                baseItems.remove(category);
-                initAdapter();
-                adapter.notifyDataSetChanged();
+                adapter.remove(category);
             }
 
             @Override

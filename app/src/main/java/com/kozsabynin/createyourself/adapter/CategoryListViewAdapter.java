@@ -14,9 +14,7 @@ import com.kozsabynin.createyourself.R;
 import com.kozsabynin.createyourself.domain.Cashflow;
 import com.kozsabynin.createyourself.domain.Category;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by Evgeni Developer on 03.04.2016.
@@ -28,11 +26,11 @@ public class CategoryListViewAdapter extends ArrayAdapter<Category> {
     private SparseBooleanArray mSelectedItemsIds;
 
     public CategoryListViewAdapter(Context context, int resourceId,
-                                   Set<Category> baseItemsList) {
-        super(context, resourceId, new ArrayList<>(baseItemsList));
+                                   List<Category> baseItemsList) {
+        super(context, resourceId, baseItemsList);
         mSelectedItemsIds = new SparseBooleanArray();
         this.context = context;
-        this.baseItemsList = new ArrayList<>(baseItemsList);
+        this.baseItemsList = baseItemsList;
         inflater = LayoutInflater.from(context);
     }
 

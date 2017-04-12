@@ -35,7 +35,8 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_toRightOf="@+id/imageView"
-        android:layout_toEndOf="@+id/imageView" />
+        android:layout_toEndOf="@+id/imageView"
+        android:inputType="text" />
 
 
     <ImageView
@@ -103,7 +104,8 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_toRightOf="@+id/title_icon"
-        android:layout_toEndOf="@+id/title_icon" />
+        android:layout_toEndOf="@+id/title_icon"
+        android:inputType="text" />
 
     <Button
         android:id="@+id/save_template"
