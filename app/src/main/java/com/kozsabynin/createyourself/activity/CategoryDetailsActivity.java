@@ -14,16 +14,10 @@ import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.kozsabynin.createyourself.R;
-import com.kozsabynin.createyourself.db.CategoryDbHelper;
 import com.kozsabynin.createyourself.db.CategoryFirebaseService;
-import com.kozsabynin.createyourself.db.TemplateFirebaseService;
 import com.kozsabynin.createyourself.domain.CashType;
 import com.kozsabynin.createyourself.domain.Category;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class CategoryDetailsActivity extends AppCompatActivity {
     private EditText titleEditor;

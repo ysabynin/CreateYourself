@@ -12,19 +12,13 @@ import android.widget.ListView;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.kozsabynin.createyourself.R;
 import com.kozsabynin.createyourself.adapter.TemplateListViewAdapter;
-import com.kozsabynin.createyourself.db.TemplateDbHelper;
 import com.kozsabynin.createyourself.db.TemplateFirebaseService;
-import com.kozsabynin.createyourself.domain.Cashflow;
 import com.kozsabynin.createyourself.domain.Template;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class TemplateActivity extends AppCompatActivity {
     private TemplateListViewAdapter adapter = null;

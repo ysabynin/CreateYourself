@@ -18,14 +18,12 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.kozsabynin.createyourself.R;
-import com.kozsabynin.createyourself.db.CashflowDbHelper;
 import com.kozsabynin.createyourself.domain.CashType;
 import com.kozsabynin.createyourself.domain.CashflowLineChartElement;
 import com.kozsabynin.createyourself.domain.CashflowPieChartElement;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class BalanceFragment extends Fragment {
 
@@ -41,15 +39,14 @@ public class BalanceFragment extends Fragment {
         incomePieChart = (PieChart) view.findViewById(R.id.category_income_pie_chart);
         balanceChart = (LineChart) view.findViewById(R.id.balance_line_chart);
 
-        CashflowDbHelper cashflowDbHelper = new CashflowDbHelper(getActivity());
-        Set<CashflowPieChartElement> incomeItems = cashflowDbHelper.getPieChartCashflow(CashType.INCOME);
+/*        Set<CashflowPieChartElement> incomeItems = cashflowDbHelper.getPieChartCashflow(CashType.INCOME);
         Set<CashflowPieChartElement> expenseItems = cashflowDbHelper.getPieChartCashflow(CashType.EXPENSE);
         List<CashflowLineChartElement> totalAmountByMonthes = cashflowDbHelper.getLineChartCashflow();
 
         // add data
         addDataToPieChart(incomePieChart,new ArrayList<>(incomeItems),CashType.INCOME);
         addDataToPieChart(assetsPieChart,new ArrayList<>(expenseItems),CashType.EXPENSE);
-        addDataToLineChart(totalAmountByMonthes);
+        addDataToLineChart(totalAmountByMonthes);*/
 
         return view;
     }
@@ -155,7 +152,7 @@ public class BalanceFragment extends Fragment {
 
     @Override
     public void onResume() {
-        CashflowDbHelper cashflowDbHelper = new CashflowDbHelper(getActivity());
+/*        CashflowDbHelper cashflowDbHelper = new CashflowDbHelper(getActivity());
         List<CashflowPieChartElement> incomeItems = new ArrayList<>(cashflowDbHelper.getPieChartCashflow(CashType.INCOME));
         List<CashflowPieChartElement> expenseItems = new ArrayList<>(cashflowDbHelper.getPieChartCashflow(CashType.EXPENSE));
         List<CashflowLineChartElement> totalAmountByMonthes = cashflowDbHelper.getLineChartCashflow();
@@ -163,7 +160,7 @@ public class BalanceFragment extends Fragment {
         // add data
         addDataToPieChart(incomePieChart,incomeItems,CashType.INCOME);
         addDataToPieChart(assetsPieChart, expenseItems, CashType.EXPENSE);
-        addDataToLineChart(totalAmountByMonthes);
+        addDataToLineChart(totalAmountByMonthes);*/
 
         super.onResume();
     }

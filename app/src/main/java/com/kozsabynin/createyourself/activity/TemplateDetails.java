@@ -12,18 +12,11 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.kozsabynin.createyourself.R;
-import com.kozsabynin.createyourself.db.TemplateDbHelper;
 import com.kozsabynin.createyourself.db.TemplateFirebaseService;
 import com.kozsabynin.createyourself.domain.CashType;
-import com.kozsabynin.createyourself.domain.Cashflow;
 import com.kozsabynin.createyourself.domain.Category;
 import com.kozsabynin.createyourself.domain.Template;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class TemplateDetails extends AppCompatActivity {
     private EditText costEditor;

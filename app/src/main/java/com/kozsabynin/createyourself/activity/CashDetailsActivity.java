@@ -21,7 +21,6 @@ import android.widget.Toast;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.kozsabynin.createyourself.R;
-import com.kozsabynin.createyourself.db.CashflowDbHelper;
 import com.kozsabynin.createyourself.db.CashflowFirebaseService;
 import com.kozsabynin.createyourself.db.TemplateFirebaseService;
 import com.kozsabynin.createyourself.domain.CashType;
@@ -31,9 +30,7 @@ import com.kozsabynin.createyourself.domain.Template;
 import com.kozsabynin.createyourself.util.DateUtils;
 
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 
 public class CashDetailsActivity extends AppCompatActivity {
 
@@ -108,8 +105,6 @@ public class CashDetailsActivity extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CashflowDbHelper cashflowDbHelper = new CashflowDbHelper(getApplicationContext());
-
                 String title = titleEditor.getText().toString();
                 String categoryText = categoryEditor.getText().toString();
                 String costText = costEditor.getText().toString();
