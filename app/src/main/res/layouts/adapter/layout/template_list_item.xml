@@ -24,6 +24,8 @@
         android:textAppearance="?android:attr/textAppearanceListItemSmall"
         android:gravity="center_vertical"
         android:layout_toRightOf="@+id/category_icon"
+        android:layout_toLeftOf="@+id/price"
+        android:singleLine="true"
         />
 
     <TextView

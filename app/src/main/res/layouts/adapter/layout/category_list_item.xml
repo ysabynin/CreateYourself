@@ -25,6 +25,7 @@
         android:textAppearance="?android:attr/textAppearanceListItemSmall"
         android:layout_centerVertical="true"
         android:layout_toRightOf="@+id/category_icon"
+        android:singleLine="true"
         />
 
 </RelativeLayout>
